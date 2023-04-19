@@ -1,6 +1,9 @@
 """
 My first application
 """
+import asyncio
+
+#briefcase run android -d "@Pixel_3a_API_33_x86_64"
 import toga
 from toga.style import Pack
 from toga.style.pack import COLUMN, ROW
@@ -10,6 +13,7 @@ import httpx
 class HelloWorld(toga.App):
 
     def startup(self):
+        self.text_appearance = True
         main_box = toga.Box(style=Pack(direction=COLUMN))
 
         name_label = toga.Label(
@@ -35,6 +39,8 @@ class HelloWorld(toga.App):
         self.main_window = toga.MainWindow(title=self.formal_name)
         self.main_window.content = main_box
         self.main_window.show()
+        self.add_background_task(self.changeTitle)
+        self.add_background_task(self.changeTrueTitle)
 
     def say_hello(self, widget):
         with httpx.Client() as client:
@@ -46,6 +52,14 @@ class HelloWorld(toga.App):
             greeting(self.name_input.value),
             payload["body"],
         )
+
+    def changeTitle(self,widget):
+        yield 3
+        self.main_window.title = "Il est tard"
+
+    async def changeTrueTitle(self,widget):
+        await asyncio.sleep(10)
+        self.main_window.title = "Il est vraiment tard"
 
 def greeting(name):
     if name:
