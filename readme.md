@@ -7,12 +7,12 @@ ____
 
 ## Technologies used :
 
-![PYTHON] [Python]
-![TOGA] [Toga]
-![PYLSL] [pylsl]
-![TOGACHART] [Togachart]
-![PYXDF] [PyXDF]
-![NUMPY] [Numpy]
+![Python]
+![Toga]
+![pylsl]
+![Togachart]
+![PyXDF]
+![Numpy]
   
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
