@@ -22,7 +22,6 @@ test_sources = [
 ]
 
 requires = [
-    "numpy",
 ]
 test_requires = [
     "pytest",
