@@ -5,7 +5,7 @@ import numpy as np
 import toga
 from toga.style import Pack
 from toga.style.pack import COLUMN, ROW
-import numpy as np
+#import numpy as np
 
 
 class HelloWorld(toga.App):
@@ -18,7 +18,7 @@ class HelloWorld(toga.App):
             style=Pack(padding=(0, 5))
         )
 
-        chaine = toga.Label(np.array([0,1,2,3,4,5,6,7,8,9]))
+        #chaine = toga.Label(np.array([0,1,2,3,4,5,6,7,8,9]))
         self.name_input = toga.TextInput(style=Pack(flex=1))
 
         name_box = toga.Box(style=Pack(direction=ROW, padding=5))
@@ -31,7 +31,7 @@ class HelloWorld(toga.App):
             style=Pack(padding=5)
         )
 
-        main_box.add(chaine)
+        #main_box.add(chaine)
         main_box.add(name_box)
         main_box.add(button)
 
