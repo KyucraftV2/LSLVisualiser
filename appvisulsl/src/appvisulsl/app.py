@@ -83,6 +83,9 @@ class HelloWorld(toga.App):
         self.label = toga.Label("this text is flashing")
         self.main_box.add(self.label)
 
+        self.liste = toga.Label(np.array([1,2,3,4,5,6,7,89]))
+        self.main_box.add(self.liste)
+
         # Show main window
         self.main_window = toga.MainWindow(title=self.formal_name)
         self.main_window.content = self.main_box
