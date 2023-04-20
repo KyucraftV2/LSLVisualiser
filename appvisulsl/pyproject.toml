@@ -22,7 +22,9 @@ test_sources = [
 ]
 
 requires = [
+    "httpx",
     "numpy",
+    "toga-chart",
 ]
 test_requires = [
     "pytest",

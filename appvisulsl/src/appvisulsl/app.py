@@ -5,12 +5,19 @@ import asyncio
 import toga
 from toga.style import Pack
 from toga.style.pack import COLUMN, ROW
+import httpx
 import numpy as np
-
+import toga_chart
 
 listeString = ["Il est tard mon ami"]
 
 class HelloWorld(toga.App):
+
+    def draw_chart(self, chart, figure):
+        labels = 'Frogs', 'Hogs', 'Dogs', 'Logs'
+        sizes = [15, 30, 45, 10]
+        ax = figure.subplots()
+        ax.pie(sizes, labels=labels)
 
     def startup(self):
         main_box = toga.Box(style=Pack(direction=COLUMN))
@@ -19,9 +26,13 @@ class HelloWorld(toga.App):
             style=Pack(padding=(0, 5))
         )
 
+        #self.labelnp = toga.Label(np.array([1,2,3,4,5,6,7,8,9]))
+
+        self.labelhttpx = toga.Label(httpx.URL("perdu.com").is_absolute_url)
         self.labelnp = toga.Label(np.array([1,2,3,4,5,6,7,8,9]))
 
         self.name_input = toga.TextInput(style=Pack(flex=1))
+        self.name_input.placeholder = "Test"
 
         name_box = toga.Box(style=Pack(direction=ROW, padding=5))
         name_box.add(name_label)
@@ -33,9 +44,19 @@ class HelloWorld(toga.App):
             style=Pack(padding=5)
         )
 
+
+        main_box.add(self.labelhttpx)
         main_box.add(self.labelnp)
         main_box.add(name_box)
         main_box.add(button)
+
+        ## make a chart with toga chart
+        self.chart = toga_chart.Chart(
+            style=Pack(flex=1),
+            on_draw=self.draw_chart
+        )
+
+        main_box.add(self.chart)
 
         self.main_window = toga.MainWindow(title=self.formal_name)
         self.main_window.content = main_box
