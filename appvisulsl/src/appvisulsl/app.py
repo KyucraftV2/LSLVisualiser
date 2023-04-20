@@ -6,17 +6,10 @@ import toga
 from toga.style import Pack
 from toga.style.pack import COLUMN, ROW
 import httpx
-import toga_chart
 
 listeString = ["Il est tard mon ami"]
 
 class HelloWorld(toga.App):
-
-    def draw_chart(self, chart, figure):
-        labels = 'Frogs', 'Hogs', 'Dogs', 'Logs'
-        sizes = [15, 30, 45, 10]
-        ax = figure.subplots()
-        ax.pie(sizes, labels=labels)
 
     def startup(self):
         main_box = toga.Box(style=Pack(direction=COLUMN))
@@ -46,14 +39,6 @@ class HelloWorld(toga.App):
         main_box.add(self.labelhttpx)
         main_box.add(name_box)
         main_box.add(button)
-
-        ## make a chart with toga chart
-        self.chart = toga_chart.Chart(
-            style=Pack(flex=1),
-            on_draw=self.draw_chart
-        )
-
-        main_box.add(self.chart)
 
         self.main_window = toga.MainWindow(title=self.formal_name)
         self.main_window.content = main_box
