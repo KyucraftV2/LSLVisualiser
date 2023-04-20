@@ -6,7 +6,6 @@ import toga
 from toga.style import Pack
 from toga.style.pack import COLUMN, ROW
 import httpx
-import numpy as np
 import toga_chart
 
 listeString = ["Il est tard mon ami"]
@@ -29,7 +28,6 @@ class HelloWorld(toga.App):
         #self.labelnp = toga.Label(np.array([1,2,3,4,5,6,7,8,9]))
 
         self.labelhttpx = toga.Label(httpx.URL("perdu.com").is_absolute_url)
-        self.labelnp = toga.Label(np.array([1,2,3,4,5,6,7,8,9]))
 
         self.name_input = toga.TextInput(style=Pack(flex=1))
         self.name_input.placeholder = "Test"
@@ -46,7 +44,6 @@ class HelloWorld(toga.App):
 
 
         main_box.add(self.labelhttpx)
-        main_box.add(self.labelnp)
         main_box.add(name_box)
         main_box.add(button)
 
