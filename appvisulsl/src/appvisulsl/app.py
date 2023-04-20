@@ -6,19 +6,40 @@ import toga
 from toga.style import Pack
 from toga.style.pack import COLUMN, ROW
 import httpx
+import matplotlib.pyplot as plt
 
 listeString = ["Il est tard mon ami"]
 
 class HelloWorld(toga.App):
 
+    def createData(self):
+        labels = 'Frogs', 'Hogs', 'Dogs', 'Logs'
+        sizes = [15, 30, 45, 10]
+        plt.subplots()
+        plt.pie(sizes,labels=labels)
+        plt.savefig("temp.jpg")
+
+    def afficherGraphe(self,widget):
+        self.createData()
+        image = toga.Image("temp.jpg")
+        imageChart = toga.ImageView(id='view1', image=image)
+        self.main_window.content = None
+        self.main_box.add(imageChart)
+        self.main_window.content = self.main_box
+        self.main_window.show()
+
     def startup(self):
-        main_box = toga.Box(style=Pack(direction=COLUMN))
+
+        self.createData()
+        self.main_box = toga.Box(style=Pack(direction=COLUMN))
         name_label = toga.Label(
             "Your name: ",
             style=Pack(padding=(0, 5))
         )
 
         #self.labelnp = toga.Label(np.array([1,2,3,4,5,6,7,8,9]))
+
+        self.boutonChart = toga.Button("Afficher le graphe", on_press=self.afficherGraphe)
 
         self.labelhttpx = toga.Label(httpx.URL("perdu.com").is_absolute_url)
 
@@ -36,12 +57,13 @@ class HelloWorld(toga.App):
         )
 
 
-        main_box.add(self.labelhttpx)
-        main_box.add(name_box)
-        main_box.add(button)
+        self.main_box.add(self.labelhttpx)
+        self.main_box.add(name_box)
+        self.main_box.add(button)
+        self.main_box.add(self.boutonChart)
 
         self.main_window = toga.MainWindow(title=self.formal_name)
-        self.main_window.content = main_box
+        self.main_window.content = self.main_box
         self.main_window.show()
         self.add_background_task(self.changeTitle)
         self.add_background_task(self.changeTrueTitle)

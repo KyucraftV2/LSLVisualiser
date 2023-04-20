@@ -23,7 +23,7 @@ test_sources = [
 
 requires = [
     "httpx",
-    "toga-chart",
+    "matplotlib==3.6.0"
 ]
 test_requires = [
     "pytest",
