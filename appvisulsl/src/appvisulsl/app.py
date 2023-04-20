@@ -5,7 +5,6 @@ import asyncio
 import toga
 from toga.style import Pack
 from toga.style.pack import COLUMN, ROW
-import httpx
 import matplotlib.pyplot as plt
 
 listeString = ["Il est tard mon ami"]
@@ -41,7 +40,7 @@ class HelloWorld(toga.App):
 
         self.boutonChart = toga.Button("Afficher le graphe", on_press=self.afficherGraphe)
 
-        self.labelhttpx = toga.Label(httpx.URL("perdu.com").is_absolute_url)
+        self.labelhttpx = toga.Label("False")
 
         self.name_input = toga.TextInput(style=Pack(flex=1))
         self.name_input.placeholder = "Test"

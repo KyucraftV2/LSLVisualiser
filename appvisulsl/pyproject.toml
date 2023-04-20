@@ -22,8 +22,7 @@ test_sources = [
 ]
 
 requires = [
-    "httpx",
-    "matplotlib==3.6.0"
+    "matplotlib==3.6.0",
 ]
 test_requires = [
     "pytest",
