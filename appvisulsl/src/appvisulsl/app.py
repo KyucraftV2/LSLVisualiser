@@ -7,11 +7,13 @@ from toga.style import Pack
 from toga.style.pack import COLUMN, ROW
 import matplotlib.pyplot as plt
 import os
+import datetime
 
 listeString = ["Il est tard mon ami"]
 
 class HelloWorld(toga.App):
 
+    heure = None
     valeurDict = 1
     dictVal = {1: {
                       'labels': ['Frogs', 'Hogs', 'Dogs', 'Logs'],
@@ -36,34 +38,44 @@ class HelloWorld(toga.App):
 
     def createData(self):
         # make a pie chart
-        ax = plt.pie(HelloWorld.dictVal[HelloWorld.valeurDict]['sizes'],labels=HelloWorld.dictVal[HelloWorld.valeurDict]['labels'])
+        plt.pie(HelloWorld.dictVal[HelloWorld.valeurDict]['sizes'],labels=HelloWorld.dictVal[HelloWorld.valeurDict]['labels'])
         save = os.path.join(os.environ['USERPROFILE'], r'Downloads\test.png')
+        if os.path.exists(save):
+            try:
+                try:
+                    self.main_box.remove(self.imageChart)
+                    self.imageChart = None
+                    self.image = None
+                except:
+                    pass
+            except OSError as e:
+                pass
         plt.savefig(save)
 
     def afficherGraphe(self,widget):
         self.createData()
         save = os.path.join(os.environ['USERPROFILE'], r'Downloads\test.png')
-        image = toga.Image(save)
-        imageChart = toga.ImageView(id='view1', image=image)
-        self.main_box.add(imageChart)
+        self.image = toga.Image(save)
+        self.imageChart = toga.ImageView(id='view1', image=self.image)
+        self.main_box.add(self.imageChart)
         self.main_window.content = self.main_box
         self.main_window.show()
         #self.add_background_task(self.regenGraphe)
 
-    def regenGraphe(self,widget):
-        yield 3
-        if HelloWorld.valeurDict < 5:
-            HelloWorld.valeurDict += 1
-        elif HelloWorld.valeurDict == 5:
-            HelloWorld.valeurDict = 1
-        self.createData()
-        save = os.path.join(os.environ['USERPROFILE'], r'Downloads\test.png')
-        image = toga.Image(save)
-        imageChart = toga.ImageView(id='view1', image=image)
-        self.main_box.add(imageChart)
-        self.main_window.content = self.main_box
-        self.main_window.show()
-        self.add_background_task(self.regenGraphe)
+    # def regenGraphe(self,widget):
+    #     yield 3
+    #     if HelloWorld.valeurDict < 5:
+    #         HelloWorld.valeurDict += 1
+    #     elif HelloWorld.valeurDict == 5:
+    #         HelloWorld.valeurDict = 1
+    #     self.createData()
+    #     save = os.path.join(os.environ['USERPROFILE'], r'Downloads\test.png')
+    #     image = toga.Image(save)
+    #     imageChart = toga.ImageView(id='view1', image=image)
+    #     self.main_box.add(imageChart)
+    #     self.main_window.content = self.main_box
+    #     self.main_window.show()
+    #     self.add_background_task(self.regenGraphe)
 
     def startup(self):
         self.main_box = toga.Box(style=Pack(direction=COLUMN))
