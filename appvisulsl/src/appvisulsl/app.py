@@ -16,31 +16,31 @@ class HelloWorld(toga.App):
     heure = None
     valeurDict = 1
     dictVal = {1: {
-                      'labels': ['Frogs', 'Hogs', 'Dogs', 'Logs'],
-                      'sizes': [35, 9, 19, 37]
-                  },
-                2: {
-                      'labels': ['Frogs', 'Hogs', 'Dogs', 'Logs'],
-                      'sizes': [19, 33, 21, 27]
-                  },
-                3: {
-                      'labels': ['Frogs', 'Hogs', 'Dogs', 'Logs'],
-                      'sizes': [20, 43, 28, 9]
-                  },
-                4: {
-                      'labels': ['Frogs', 'Hogs', 'Dogs', 'Logs'],
-                      'sizes': [23, 5, 22, 50]
-                  },
-                5: {
-                      'labels': ['Frogs', 'Hogs', 'Dogs', 'Logs'],
-                      'sizes': [15, 43, 23, 19]
-                  }}
+        'labels': ['Frogs', 'Hogs', 'Dogs', 'Logs'],
+        'sizes': [35, 9, 19, 37]
+    },
+        2: {
+            'labels': ['Frogs', 'Hogs', 'Dogs', 'Logs'],
+            'sizes': [19, 33, 21, 27]
+        },
+        3: {
+            'labels': ['Frogs', 'Hogs', 'Dogs', 'Logs'],
+            'sizes': [20, 43, 28, 9]
+        },
+        4: {
+            'labels': ['Frogs', 'Hogs', 'Dogs', 'Logs'],
+            'sizes': [23, 5, 22, 50]
+        },
+        5: {
+            'labels': ['Frogs', 'Hogs', 'Dogs', 'Logs'],
+            'sizes': [15, 43, 23, 19]
+        }}
 
     def createData(self):
         # make a pie chart
         plt.pie(HelloWorld.dictVal[HelloWorld.valeurDict]['sizes'],labels=HelloWorld.dictVal[HelloWorld.valeurDict]['labels'])
         try:
-            save = os.path.join(os.environ['USERPROFILE'], r'Downloads\test.png')
+            save = os.path.join(os.getcwd(), r'Desktop\appLSLVisu\appvisulsl\src\appvisulsl\resources\temp.png')
             try:
                 self.main_box.remove(self.imageChart)
                 self.imageChart = None
@@ -59,7 +59,7 @@ class HelloWorld(toga.App):
     def afficherGraphe(self,widget):
         self.createData()
         try:
-            save = os.path.join(os.environ['USERPROFILE'], r'Downloads\test.png')
+            save = os.path.join(os.getcwd(), r'Desktop\appLSLVisu\appvisulsl\src\appvisulsl\resources\temp.png')
             self.image = toga.Image(save)
             self.imageChart = toga.ImageView(id='view1', image=self.image)
             self.main_box.add(self.imageChart)
