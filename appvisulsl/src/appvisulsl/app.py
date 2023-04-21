@@ -16,13 +16,12 @@ class HelloWorld(toga.App):
         sizes = [15, 30, 45, 10]
         plt.subplots()
         plt.pie(sizes,labels=labels)
-        plt.savefig("temp.jpg")
+        plt.savefig("temp.png")
 
     def afficherGraphe(self,widget):
         self.createData()
-        image = toga.Image("temp.jpg")
+        image = toga.Image("resources/pieChart.png")
         imageChart = toga.ImageView(id='view1', image=image)
-        self.main_window.content = None
         self.main_box.add(imageChart)
         self.main_window.content = self.main_box
         self.main_window.show()
@@ -35,8 +34,6 @@ class HelloWorld(toga.App):
             "Your name: ",
             style=Pack(padding=(0, 5))
         )
-
-        #self.labelnp = toga.Label(np.array([1,2,3,4,5,6,7,8,9]))
 
         self.boutonChart = toga.Button("Afficher le graphe", on_press=self.afficherGraphe)
 
