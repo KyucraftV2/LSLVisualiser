@@ -39,27 +39,34 @@ class HelloWorld(toga.App):
     def createData(self):
         # make a pie chart
         plt.pie(HelloWorld.dictVal[HelloWorld.valeurDict]['sizes'],labels=HelloWorld.dictVal[HelloWorld.valeurDict]['labels'])
-        save = os.path.join(os.environ['USERPROFILE'], r'Downloads\test.png')
-        if os.path.exists(save):
+        try:
+            save = os.path.join(os.environ['USERPROFILE'], r'Downloads\test.png')
             try:
-                try:
-                    self.main_box.remove(self.imageChart)
-                    self.imageChart = None
-                    self.image = None
-                except:
-                    pass
+                self.main_box.remove(self.imageChart)
+                self.imageChart = None
+                self.image = None
+            except:
+                pass
+            try:
+                pass
             except OSError as e:
                 pass
-        plt.savefig(save)
-
+            if os.path.exists(save):
+                pass
+            plt.savefig(save)
+        except:
+            print("Android")
     def afficherGraphe(self,widget):
         self.createData()
-        save = os.path.join(os.environ['USERPROFILE'], r'Downloads\test.png')
-        self.image = toga.Image(save)
-        self.imageChart = toga.ImageView(id='view1', image=self.image)
-        self.main_box.add(self.imageChart)
-        self.main_window.content = self.main_box
-        self.main_window.show()
+        try:
+            save = os.path.join(os.environ['USERPROFILE'], r'Downloads\test.png')
+            self.image = toga.Image(save)
+            self.imageChart = toga.ImageView(id='view1', image=self.image)
+            self.main_box.add(self.imageChart)
+            self.main_window.content = self.main_box
+            self.main_window.show()
+        except:
+            print("Android")
         #self.add_background_task(self.regenGraphe)
 
     # def regenGraphe(self,widget):
