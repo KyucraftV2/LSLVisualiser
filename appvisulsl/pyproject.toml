@@ -22,7 +22,7 @@ test_sources = [
 ]
 
 requires = [
-    "matplotlib==3.6.0",
+    "matplotlib==3.1.2",
 ]
 test_requires = [
     "pytest",
