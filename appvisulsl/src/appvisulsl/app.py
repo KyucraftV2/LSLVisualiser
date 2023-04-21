@@ -12,11 +12,31 @@ listeString = ["Il est tard mon ami"]
 
 class HelloWorld(toga.App):
 
+    valeurDict = 1
+    dictVal = {1: {
+                      'labels': ['Frogs', 'Hogs', 'Dogs', 'Logs'],
+                      'sizes': [35, 9, 19, 37]
+                  },
+                2: {
+                      'labels': ['Frogs', 'Hogs', 'Dogs', 'Logs'],
+                      'sizes': [19, 33, 21, 27]
+                  },
+                3: {
+                      'labels': ['Frogs', 'Hogs', 'Dogs', 'Logs'],
+                      'sizes': [20, 43, 28, 9]
+                  },
+                4: {
+                      'labels': ['Frogs', 'Hogs', 'Dogs', 'Logs'],
+                      'sizes': [23, 5, 22, 50]
+                  },
+                5: {
+                      'labels': ['Frogs', 'Hogs', 'Dogs', 'Logs'],
+                      'sizes': [15, 43, 23, 19]
+                  }}
+
     def createData(self):
-        labels = 'Frogs', 'Hogs', 'Dogs', 'Logs'
-        sizes = [15, 30, 45, 10]
         # make a pie chart
-        ax = plt.pie(sizes,labels=labels)
+        ax = plt.pie(HelloWorld.dictVal[HelloWorld.valeurDict]['sizes'],labels=HelloWorld.dictVal[HelloWorld.valeurDict]['labels'])
         save = os.path.join(os.environ['USERPROFILE'], r'Downloads\test.png')
         plt.savefig(save)
 
@@ -27,7 +47,23 @@ class HelloWorld(toga.App):
         imageChart = toga.ImageView(id='view1', image=image)
         self.main_box.add(imageChart)
         self.main_window.content = self.main_box
-        self.main_window.show()A
+        self.main_window.show()
+        #self.add_background_task(self.regenGraphe)
+
+    def regenGraphe(self,widget):
+        yield 3
+        if HelloWorld.valeurDict < 5:
+            HelloWorld.valeurDict += 1
+        elif HelloWorld.valeurDict == 5:
+            HelloWorld.valeurDict = 1
+        self.createData()
+        save = os.path.join(os.environ['USERPROFILE'], r'Downloads\test.png')
+        image = toga.Image(save)
+        imageChart = toga.ImageView(id='view1', image=image)
+        self.main_box.add(imageChart)
+        self.main_window.content = self.main_box
+        self.main_window.show()
+        self.add_background_task(self.regenGraphe)
 
     def startup(self):
         self.main_box = toga.Box(style=Pack(direction=COLUMN))
