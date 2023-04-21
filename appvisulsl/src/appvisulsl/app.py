@@ -6,6 +6,7 @@ import toga
 from toga.style import Pack
 from toga.style.pack import COLUMN, ROW
 import matplotlib.pyplot as plt
+import os
 
 listeString = ["Il est tard mon ami"]
 
@@ -14,21 +15,21 @@ class HelloWorld(toga.App):
     def createData(self):
         labels = 'Frogs', 'Hogs', 'Dogs', 'Logs'
         sizes = [15, 30, 45, 10]
-        plt.subplots()
-        plt.pie(sizes,labels=labels)
-        plt.savefig("temp.png")
+        # make a pie chart
+        ax = plt.pie(sizes,labels=labels)
+        save = os.path.join(os.environ['USERPROFILE'], r'Downloads\test.png')
+        plt.savefig(save)
 
     def afficherGraphe(self,widget):
         self.createData()
-        image = toga.Image("resources/pieChart.png")
+        save = os.path.join(os.environ['USERPROFILE'], r'Downloads\test.png')
+        image = toga.Image(save)
         imageChart = toga.ImageView(id='view1', image=image)
         self.main_box.add(imageChart)
         self.main_window.content = self.main_box
-        self.main_window.show()
+        self.main_window.show()A
 
     def startup(self):
-
-        self.createData()
         self.main_box = toga.Box(style=Pack(direction=COLUMN))
         name_label = toga.Label(
             "Your name: ",
