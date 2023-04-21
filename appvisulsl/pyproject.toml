@@ -1,6 +1,6 @@
 # This project was generated with Unknown using template: https://github.com/beeware/briefcase-template@v0.3.14
 [tool.briefcase]
-project_name = "AppVisuLSL"
+project_name = "appvisulsl"
 bundle = "com.example"
 version = "0.0.1"
 url = "https://example.com/appvisulsl"
@@ -9,8 +9,8 @@ author = "Killian Reiner"
 author_email = "k.reiner@freeline-web.fr"
 
 [tool.briefcase.app.appvisulsl]
-formal_name = "AppVisuLSL"
-description = "Application permettant de voir des données LSL en direct"
+formal_name = "appvisulsl"
+description = "My first application"
 long_description = """More details about the app should go here.
 """
 icon = "src/appvisulsl/resources/appvisulsl"
@@ -22,7 +22,6 @@ test_sources = [
 ]
 
 requires = [
-    "matplotlib==3.6.0",
 ]
 test_requires = [
     "pytest",
