@@ -40,7 +40,7 @@ class HelloWorld(toga.App):
         # make a pie chart
         plt.pie(HelloWorld.dictVal[HelloWorld.valeurDict]['sizes'],labels=HelloWorld.dictVal[HelloWorld.valeurDict]['labels'])
         try:
-            save = os.path.join(os.getcwd(), r'Desktop\appLSLVisu\appvisulsl\src\appvisulsl\resources\temp.png')
+            save = os.path.join(os.getcwd(), r'Desktop\appLSLVisu\appvisulsl\src\appvisulsl\resources\graphe.png')
             try:
                 self.main_box.remove(self.imageChart)
                 self.imageChart = None
@@ -59,7 +59,7 @@ class HelloWorld(toga.App):
     def afficherGraphe(self,widget):
         self.createData()
         try:
-            save = os.path.join(os.getcwd(), r'Desktop\appLSLVisu\appvisulsl\src\appvisulsl\resources\temp.png')
+            save = os.path.join(os.getcwd(), r'Desktop\appLSLVisu\appvisulsl\src\appvisulsl\resources\graphe.png')
             self.image = toga.Image(save)
             self.imageChart = toga.ImageView(id='view1', image=self.image)
             self.main_box.add(self.imageChart)
