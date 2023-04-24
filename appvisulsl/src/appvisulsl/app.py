@@ -42,9 +42,7 @@ class HelloWorld(toga.App):
         plt.pie(HelloWorld.dictVal[HelloWorld.valeurDict]['sizes'],
                 labels=HelloWorld.dictVal[HelloWorld.valeurDict]['labels'])
         try:
-            save = os.path.join(os.getcwd(),
-                                r'Documents\GitHub\LSLVisualiser\appvisulsl\src\appvisulsl\resources\graphe' + str(
-                                    HelloWorld.nbGraphes) + ".png")
+            save = os.path.join(os.path.normpath(toga.App.app.paths.app),str(HelloWorld.nbGraphes) + ".png")
             try:
                 self.main_box.remove(self.imageChart)
                 self.imageChart = None
@@ -59,15 +57,14 @@ class HelloWorld(toga.App):
                 HelloWorld.valeurDict = 1
             plt.close()
         except:
-            save = os.path.normpath("/graphe")
-            print(save)
+            save = os.path.join(os.path.normpath(toga.App.app.paths.app),str(HelloWorld.nbGraphes) + ".png")
             try:
                 self.main_box.remove(self.imageChart)
                 self.imageChart = None
                 self.image = None
             except:
                 pass
-            plt.savefig(save+str(HelloWorld.nbGraphes)+".png")
+            plt.savefig(save)
             HelloWorld.nbGraphes += 1
             if HelloWorld.valeurDict < 5:
                 HelloWorld.valeurDict += 1
@@ -78,11 +75,9 @@ class HelloWorld(toga.App):
     def afficherGraphe(self, widget):
         self.createData()
         try:
-            save = os.path.join(os.getcwd(),
-                                r'Documents\GitHub\LSLVisualiser\appvisulsl\src\appvisulsl\resources\graphe' + str(
-                                    HelloWorld.nbGraphes-1) + ".png")
+            save = os.path.join(os.path.normpath(toga.App.app.paths.app), str(HelloWorld.nbGraphes-1) + ".png")
         except:
-            save = os.path.normpath("/graphe" + str(HelloWorld.nbGraphes - 1) + '.png')
+            save = os.path.join(os.path.normpath(toga.App.app.paths.app), str(HelloWorld.nbGraphes-1) + ".png")
         self.image = toga.Image(save)
         self.imageChart = toga.ImageView(id='view1', image=self.image)
         self.main_box.add(self.imageChart)
