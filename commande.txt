@@ -1,5 +1,5 @@
 Commande pour start l'émulateur :
-C:\Users\killian\AppData\Local\BeeWare\briefcase\Cache\tools\android_sdk\emulator\emulator.exe "@beePhone" -dns-server 8.8.8.8
+C:\Users\killian\AppData\Local\BeeWare\briefcase\Cache\tools\android_sdk\emulator\emulator.exe "@pixel5" -dns-server 8.8.8.8
 
 Commande pour lancer l'app sur l'emu :
 briefcase run android -d "@pixel5
