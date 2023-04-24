@@ -39,13 +39,15 @@ class HelloWorld(toga.App):
     def createData(self):
         # make a pie chart
         plt.pie(HelloWorld.dictVal[HelloWorld.valeurDict]['sizes'],labels=HelloWorld.dictVal[HelloWorld.valeurDict]['labels'])
-        save = os.path.join(os.getcwd(), r'Desktop\appLSLVisu\appvisulsl\src\appvisulsl\resources\graphe')
+        #save = os.path.join(os.getcwd(), r'Desktop\appLSLVisu\appvisulsl\src\appvisulsl\resources\graphe')
+        save = os.path.normpath(os.getcwd())
+        print(os.getcwd())
         try:
             self.main_box.remove(self.imageChart)
             self.imageChart = None
             self.image = None
         except:
-            print("premiere fois")
+            pass
         plt.savefig(save + str(HelloWorld.nbGraphes)+".png")
         HelloWorld.nbGraphes += 1
         if HelloWorld.valeurDict < 5:
@@ -56,7 +58,8 @@ class HelloWorld(toga.App):
     def afficherGraphe(self,widget):
         self.createData()
         try:
-            save = os.path.join(os.getcwd(), r'Desktop\appLSLVisu\appvisulsl\src\appvisulsl\resources\graphe'+str(HelloWorld.nbGraphes-1)+'.png')
+            #save = os.path.join(os.getcwd(), r'Desktop\appLSLVisu\appvisulsl\src\appvisulsl\resources\graphe'+str(HelloWorld.nbGraphes-1)+'.png')
+            save = os.path.normpath(os.getcwd()) + str(HelloWorld.nbGraphes-1)+'.png'
             self.image = toga.Image(save)
             self.imageChart = toga.ImageView(id='view1', image=self.image)
             self.main_box.add(self.imageChart)
