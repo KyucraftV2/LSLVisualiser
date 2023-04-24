@@ -11,6 +11,7 @@ from sys import platform
 
 listeString = ["Il est tard mon ami"]
 
+
 class HelloWorld(toga.App):
     nbGraphes = 0
     heure = None
@@ -38,37 +39,56 @@ class HelloWorld(toga.App):
 
     def createData(self):
         # make a pie chart
-        plt.pie(HelloWorld.dictVal[HelloWorld.valeurDict]['sizes'],labels=HelloWorld.dictVal[HelloWorld.valeurDict]['labels'])
-        save = os.path.join(os.getcwd(), r'Desktop\appLSLVisu\appvisulsl\src\appvisulsl\resources\graphe')
-        #save = os.path.normpath(os.getcwd())
-        print(os.getcwd())
-        print(platform)
+        plt.pie(HelloWorld.dictVal[HelloWorld.valeurDict]['sizes'],
+                labels=HelloWorld.dictVal[HelloWorld.valeurDict]['labels'])
         try:
-            self.main_box.remove(self.imageChart)
-            self.imageChart = None
-            self.image = None
+            save = os.path.join(os.getcwd(),
+                                r'Documents\GitHub\LSLVisualiser\appvisulsl\src\appvisulsl\resources\graphe' + str(
+                                    HelloWorld.nbGraphes) + ".png")
+            try:
+                self.main_box.remove(self.imageChart)
+                self.imageChart = None
+                self.image = None
+            except:
+                pass
+            plt.savefig(save)
+            HelloWorld.nbGraphes += 1
+            if HelloWorld.valeurDict < 5:
+                HelloWorld.valeurDict += 1
+            elif HelloWorld.valeurDict == 5:
+                HelloWorld.valeurDict = 1
+            plt.close()
         except:
-            pass
-        plt.savefig(save + str(HelloWorld.nbGraphes)+".png")
-        HelloWorld.nbGraphes += 1
-        if HelloWorld.valeurDict < 5:
-            HelloWorld.valeurDict += 1
-        elif HelloWorld.valeurDict == 5:
-            HelloWorld.valeurDict = 1
-        plt.close()
-    def afficherGraphe(self,widget):
+            save = os.path.normpath("/graphe")
+            print(save)
+            try:
+                self.main_box.remove(self.imageChart)
+                self.imageChart = None
+                self.image = None
+            except:
+                pass
+            plt.savefig(save+str(HelloWorld.nbGraphes)+".png")
+            HelloWorld.nbGraphes += 1
+            if HelloWorld.valeurDict < 5:
+                HelloWorld.valeurDict += 1
+            elif HelloWorld.valeurDict == 5:
+                HelloWorld.valeurDict = 1
+            plt.close()
+
+    def afficherGraphe(self, widget):
         self.createData()
         try:
-            save = os.path.join(os.getcwd(), r'Desktop\appLSLVisu\appvisulsl\src\appvisulsl\resources\graphe'+str(HelloWorld.nbGraphes-1)+'.png')
-            #save = os.path.normpath(os.getcwd()) + str(HelloWorld.nbGraphes-1)+'.png'
-            self.image = toga.Image(save)
-            self.imageChart = toga.ImageView(id='view1', image=self.image)
-            self.main_box.add(self.imageChart)
-            self.main_window.content = self.main_box
-            self.main_window.show()
+            save = os.path.join(os.getcwd(),
+                                r'Documents\GitHub\LSLVisualiser\appvisulsl\src\appvisulsl\resources\graphe' + str(
+                                    HelloWorld.nbGraphes-1) + ".png")
         except:
-            print("Android")
-        #self.add_background_task(self.regenGraphe)
+            save = os.path.normpath("/graphe" + str(HelloWorld.nbGraphes - 1) + '.png')
+        self.image = toga.Image(save)
+        self.imageChart = toga.ImageView(id='view1', image=self.image)
+        self.main_box.add(self.imageChart)
+        self.main_window.content = self.main_box
+        self.main_window.show()
+        # self.add_background_task(self.regenGraphe)
 
     # def regenGraphe(self,widget):
     #     yield 3
@@ -109,7 +129,6 @@ class HelloWorld(toga.App):
             style=Pack(padding=5)
         )
 
-
         self.main_box.add(self.labelhttpx)
         self.main_box.add(name_box)
         self.main_box.add(button)
@@ -127,11 +146,11 @@ class HelloWorld(toga.App):
             "Hi there!",
         )
 
-    def changeTitle(self,widget):
+    def changeTitle(self, widget):
         yield 3
         self.main_window.title = "Il est tard"
 
-    async def changeTrueTitle(self,widget):
+    async def changeTrueTitle(self, widget):
         await asyncio.sleep(10)
         self.main_window.title = "Il est vraiment tard"
 
