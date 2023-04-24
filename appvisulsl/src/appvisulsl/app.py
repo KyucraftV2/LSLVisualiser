@@ -7,7 +7,7 @@ from toga.style import Pack
 from toga.style.pack import COLUMN, ROW
 import matplotlib.pyplot as plt
 import os
-import datetime
+from sys import platform
 
 listeString = ["Il est tard mon ami"]
 
@@ -39,9 +39,10 @@ class HelloWorld(toga.App):
     def createData(self):
         # make a pie chart
         plt.pie(HelloWorld.dictVal[HelloWorld.valeurDict]['sizes'],labels=HelloWorld.dictVal[HelloWorld.valeurDict]['labels'])
-        #save = os.path.join(os.getcwd(), r'Desktop\appLSLVisu\appvisulsl\src\appvisulsl\resources\graphe')
-        save = os.path.normpath(os.getcwd())
+        save = os.path.join(os.getcwd(), r'Desktop\appLSLVisu\appvisulsl\src\appvisulsl\resources\graphe')
+        #save = os.path.normpath(os.getcwd())
         print(os.getcwd())
+        print(platform)
         try:
             self.main_box.remove(self.imageChart)
             self.imageChart = None
@@ -58,8 +59,8 @@ class HelloWorld(toga.App):
     def afficherGraphe(self,widget):
         self.createData()
         try:
-            #save = os.path.join(os.getcwd(), r'Desktop\appLSLVisu\appvisulsl\src\appvisulsl\resources\graphe'+str(HelloWorld.nbGraphes-1)+'.png')
-            save = os.path.normpath(os.getcwd()) + str(HelloWorld.nbGraphes-1)+'.png'
+            save = os.path.join(os.getcwd(), r'Desktop\appLSLVisu\appvisulsl\src\appvisulsl\resources\graphe'+str(HelloWorld.nbGraphes-1)+'.png')
+            #save = os.path.normpath(os.getcwd()) + str(HelloWorld.nbGraphes-1)+'.png'
             self.image = toga.Image(save)
             self.imageChart = toga.ImageView(id='view1', image=self.image)
             self.main_box.add(self.imageChart)
