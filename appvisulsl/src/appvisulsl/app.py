@@ -9,6 +9,7 @@ import matplotlib.pyplot as plt
 import toga
 from toga.style import Pack
 from toga.style.pack import COLUMN, ROW
+from pylsl import *
 
 listeString = ["Il est tard mon ami"]
 
@@ -156,6 +157,14 @@ class HelloWorld(toga.App):
         # Start the background task
         self.add_background_task(self.changeTitle)
         self.add_background_task(self.changeTrueTitle)
+
+        # test XDF
+        # data,header = pyxdf.load_xdf(r"C:\Users\killian\Documents\GitHub\LSLVisualiser\appvisulsl\src\appvisulsl\resources\data.xdf")
+        # print(data)
+
+        # test LSL
+        outlet = StreamInfo(name='myStream', type='EEG', channel_count=8)
+        print(outlet)
 
     def say_hello(self, widget):
         """

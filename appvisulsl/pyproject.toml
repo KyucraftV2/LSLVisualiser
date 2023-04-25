@@ -23,6 +23,7 @@ test_sources = [
 
 requires = [
     "matplotlib==3.6.0",
+    "pylsl",
 ]
 test_requires = [
     "pytest",
