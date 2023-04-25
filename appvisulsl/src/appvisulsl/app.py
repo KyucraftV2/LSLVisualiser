@@ -4,6 +4,8 @@ My first application
 import asyncio
 import os
 import sys
+import io
+from PIL import Image
 
 import matplotlib.pyplot as plt
 import toga
@@ -41,6 +43,7 @@ class HelloWorld(toga.App):
         """
         Generate pie chart
         """
+        fig = plt.figure()
         plt.pie(HelloWorld.dictVal[HelloWorld.valeurDict]['sizes'],
                 labels=HelloWorld.dictVal[HelloWorld.valeurDict]['labels'])
         save = os.path.join(os.path.normpath(toga.App.app.paths.app), str(HelloWorld.nbGraphes) + ".png")
@@ -48,13 +51,13 @@ class HelloWorld(toga.App):
             self.main_box.remove(self.imageChart)
         except:
             pass
-        plt.savefig(save)  # sauvegarde le graph
+        fig.savefig(save)  # sauvegarde le graph
         HelloWorld.nbGraphes += 1  # incremente le nombre de graph
         if HelloWorld.valeurDict < 5:  # incremente la valeur du dictionnaire
             HelloWorld.valeurDict += 1  # si elle est inferieur a 5
         elif HelloWorld.valeurDict == 5:  # sinon la remet a 1
             HelloWorld.valeurDict = 1  # pour recommencer le cycle
-        plt.close()  # ferme le graph
+        plt.close(fig)  # ferme le graph
 
     def afficherGraphe(self, widget):
         """
@@ -158,14 +161,15 @@ class HelloWorld(toga.App):
         Function executing when the app is closing
         """
         print("Au revoir")
+        blank_img = Image.new('RGBA', size=(1, 1))
+        buffer = io.BytesIO()
+        blank_img.save(buffer, format='png', compress_level=0)
+        self.imageChart.image = toga.Image(data=buffer.getvalue())
         save = os.path.normpath(toga.App.app.paths.app)
         i = 0
         for file in os.listdir(save):
             if (file == str(i) + ".png"):
-                try:
-                    os.remove(os.path.join(os.path.normpath(toga.App.app.paths.app), file))
-                except:
-                    print(f"erreur lors de la suppression de {file}")
+                os.remove(os.path.join(os.path.normpath(toga.App.app.paths.app), file))
                 i += 1
             if i > HelloWorld.nbGraphes:
                 break
