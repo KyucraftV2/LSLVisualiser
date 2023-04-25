@@ -16,7 +16,7 @@ listeString = ["Il est tard mon ami"]
 
 class HelloWorld(toga.App):
     nbGraphes = 0  # number of generated graph
-    valeurDict = 1
+    valeurDict = 1 # temporary variable for testing app
     dictVal = {1: {
         'labels': ['Frogs', 'Hogs', 'Dogs', 'Logs'],
         'sizes': [35, 9, 19, 37]
@@ -42,20 +42,25 @@ class HelloWorld(toga.App):
         """
         Generate pie chart
         """
+        #Create the figure
         plt.figure()
         plt.pie(HelloWorld.dictVal[HelloWorld.valeurDict]['sizes'],
                 labels=HelloWorld.dictVal[HelloWorld.valeurDict]['labels'])
+        # Trying to remove the previous graph
         try:
             self.main_box.remove(self.imageChart)
         except:
             pass
 
+        # Save the graph in a temporary file
         buf = io.BytesIO()
         plt.savefig(buf, format='png')
         fp = tempfile.NamedTemporaryFile()
         with open(f"{fp.name}.png", 'wb') as f:
             f.write(buf.getvalue())
         self.listeTempFile.append(fp.name)
+
+        # Update the number of graph
         HelloWorld.nbGraphes += 1
         if HelloWorld.valeurDict < 5:
             HelloWorld.valeurDict += 1
@@ -67,75 +72,91 @@ class HelloWorld(toga.App):
         """
         Display the graph
         """
+        # Create the graph
         self.createData()
+
+        # Display the graph
         save = self.listeTempFile[HelloWorld.nbGraphes - 1] + ".png"
         self.image = toga.Image(save)
         self.imageChart = toga.ImageView(id='view1', image=self.image)
         self.main_box.add(self.imageChart)
         self.main_window.content = self.main_box
         self.main_window.show()
+
+        # Remove the button
         if HelloWorld.nbGraphes >= 1:
             self.boutonChart.enabled = False
             self.main_box.remove(self.boutonChart)
+
+        # Start the background task
         self.add_background_task(self.regenGraphe)
 
     def regenGraphe(self, widget):
+        """
+        Regenerate the graph every 3 seconds
+        """
         yield 3
+        # Create the graph
         self.createData()
+
+        # Display the graph
         save = self.listeTempFile[HelloWorld.nbGraphes - 1] + ".png"
         self.image = toga.Image(save)
         self.imageChart = toga.ImageView(id='view1', image=self.image)
         self.main_box.add(self.imageChart)
         self.main_window.content = self.main_box
         self.main_window.show()
+
+        # Start the background task
         self.add_background_task(self.regenGraphe)
 
     def startup(self):
         """
         Construct and show the Toga application.
         """
+        #Create the main box
         self.main_box = toga.Box(style=Pack(direction=COLUMN))
-        name_label = toga.Label(
-            "Your name: ",
-            style=Pack(padding=(0, 5))
-        )
 
+        # Create the button
         self.boutonChart = toga.Button("Commencer la visualisation", on_press=self.afficherGraphe)
-
-        self.labelhttpx = toga.Label("False")
-        self.listeTempFile = []
-
-        self.name_input = toga.TextInput(style=Pack(flex=1))
-        self.name_input.placeholder = "Test"
-
-        name_box = toga.Box(style=Pack(direction=ROW, padding=5))
-        name_box.add(name_label)
-        name_box.add(self.name_input)
-
         button = toga.Button(
             "Say Hello!",
             on_press=self.say_hello,
             style=Pack(padding=5)
         )
 
-        buttonQuit = toga.Button(
-            "Leave",
-            on_press=self.closeTelephone,
-            style=Pack(padding=5)
+        # Create the label
+        self.labelhttpx = toga.Label("False")
+        name_label = toga.Label(
+            "Your name: ",
+            style=Pack(padding=(0, 5))
         )
 
+        # Create the name input
+        self.name_input = toga.TextInput(style=Pack(flex=1))
+        self.name_input.placeholder = "Test"
+
+        self.listeTempFile = []
+
+        # Create the name box
+        name_box = toga.Box(style=Pack(direction=ROW, padding=5))
+        name_box.add(name_label)
+        name_box.add(self.name_input)
+
+        # Add the elements to the main box
         self.main_box.add(self.labelhttpx)
         self.main_box.add(name_box)
         self.main_box.add(button)
-        self.main_box.add(buttonQuit)
         self.main_box.add(self.boutonChart)
 
+        # Create the main window
         self.main_window = toga.MainWindow(title=self.formal_name)
         self.main_window.content = self.main_box
         self.main_window.show()
+
+        # Start the background task
         self.add_background_task(self.changeTitle)
         self.add_background_task(self.changeTrueTitle)
-        self.app.on_exit = self.fermerture
 
     def say_hello(self, widget):
         """
@@ -159,20 +180,6 @@ class HelloWorld(toga.App):
         """
         await asyncio.sleep(10)
         self.main_window.title = "Il est vraiment tard"
-
-    def fermerture(self, widget):
-        """
-        Function executing when the app is closing
-        """
-        print("Au revoir")
-        return True
-
-    def closeTelephone(self, widget):
-        """
-        Test function
-        """
-        print("Au revoir")
-        sys.exit()
 
 
 def greeting(name):
