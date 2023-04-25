@@ -83,6 +83,9 @@ class HelloWorld(toga.App):
         self.main_box.add(self.imageChart)
         self.main_window.content = self.main_box
         self.main_window.show()
+        if HelloWorld.nbGraphes >= 1:
+            self.boutonChart.enabled = False
+            self.main_box.remove(self.boutonChart)
         self.add_background_task(self.regenGraphe)
 
     def regenGraphe(self,widget):
@@ -171,17 +174,17 @@ class HelloWorld(toga.App):
         Function executing when the app is closing
         """
         print("Au revoir")
-        save = os.path.normpath(toga.App.app.paths.app)
-        i = 0
-        self.main_box.remove(self.imageChart)
-        self.image = toga.Image(os.path.join(os.path.normpath(toga.App.app.paths.app), str(HelloWorld.nbGraphes-1)+".png"))
-        self.imageChart = toga.ImageView(image=self.image)
-        for file in os.listdir(save):
-            if (file == str(i) + ".png"):
-                os.remove(os.path.join(os.path.normpath(toga.App.app.paths.app), file))
-                i += 1
-            if i > HelloWorld.nbGraphes:
-                break
+        # save = os.path.normpath(toga.App.app.paths.app)
+        # i = 0
+        # self.main_box.remove(self.imageChart)
+        # self.image = toga.Image(os.path.join(os.path.normpath(toga.App.app.paths.app), str(HelloWorld.nbGraphes-1)+".png"))
+        # self.imageChart = toga.ImageView(image=self.image)
+        # for file in os.listdir(save):
+        #     if (file == str(i) + ".png"):
+        #         os.remove(os.path.join(os.path.normpath(toga.App.app.paths.app), file))
+        #         i += 1
+        #     if i > HelloWorld.nbGraphes:
+        #         break
         return True
 
     def closeTelephone(self, widget):
