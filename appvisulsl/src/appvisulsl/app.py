@@ -3,6 +3,7 @@ My first application
 """
 import asyncio
 import os
+import sys
 
 import matplotlib.pyplot as plt
 import toga
@@ -76,31 +77,24 @@ class HelloWorld(toga.App):
         Display the graph
         """
         self.createData()
-        try:
-            save = os.path.join(os.path.normpath(toga.App.app.paths.app), str(HelloWorld.nbGraphes - 1) + ".png")
-        except:
-            save = os.path.join(os.path.normpath(toga.App.app.paths.app), str(HelloWorld.nbGraphes - 1) + ".png")
+        save = os.path.join(os.path.normpath(toga.App.app.paths.app), str(HelloWorld.nbGraphes - 1) + ".png")
         self.image = toga.Image(save)
         self.imageChart = toga.ImageView(id='view1', image=self.image)
         self.main_box.add(self.imageChart)
         self.main_window.content = self.main_box
         self.main_window.show()
-        # self.add_background_task(self.regenGraphe)
+        self.add_background_task(self.regenGraphe)
 
-    # def regenGraphe(self,widget):
-    #     yield 3
-    #     if HelloWorld.valeurDict < 5:
-    #         HelloWorld.valeurDict += 1
-    #     elif HelloWorld.valeurDict == 5:
-    #         HelloWorld.valeurDict = 1
-    #     self.createData()
-    #     save = os.path.join(os.environ['USERPROFILE'], r'Downloads\test.png')
-    #     image = toga.Image(save)
-    #     imageChart = toga.ImageView(id='view1', image=image)
-    #     self.main_box.add(imageChart)
-    #     self.main_window.content = self.main_box
-    #     self.main_window.show()
-    #     self.add_background_task(self.regenGraphe)
+    def regenGraphe(self,widget):
+        yield 3
+        self.createData()
+        save = os.path.join(os.path.normpath(toga.App.app.paths.app), str(HelloWorld.nbGraphes - 1) + ".png")
+        self.image = toga.Image(save)
+        self.imageChart = toga.ImageView(id='view1', image=self.image)
+        self.main_box.add(self.imageChart)
+        self.main_window.content = self.main_box
+        self.main_window.show()
+        self.add_background_task(self.regenGraphe)
 
     def startup(self):
         """
@@ -179,6 +173,9 @@ class HelloWorld(toga.App):
         print("Au revoir")
         save = os.path.normpath(toga.App.app.paths.app)
         i = 0
+        self.main_box.remove(self.imageChart)
+        self.image = toga.Image(os.path.join(os.path.normpath(toga.App.app.paths.app), str(HelloWorld.nbGraphes-1)+".png"))
+        self.imageChart = toga.ImageView(image=self.image)
         for file in os.listdir(save):
             if (file == str(i) + ".png"):
                 os.remove(os.path.join(os.path.normpath(toga.App.app.paths.app), file))
@@ -192,6 +189,7 @@ class HelloWorld(toga.App):
         Test function
         """
         print("Au revoir")
+        sys.exit()
 
 
 def greeting(name):
