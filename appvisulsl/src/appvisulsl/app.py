@@ -109,7 +109,7 @@ class HelloWorld(toga.App):
             style=Pack(padding=(0, 5))
         )
 
-        self.boutonChart = toga.Button("Afficher le graphe", on_press=self.afficherGraphe)
+        self.boutonChart = toga.Button("Commencer la visualisation", on_press=self.afficherGraphe)
 
         self.labelhttpx = toga.Label("False")
         self.listeTempFile = []
