@@ -3,7 +3,6 @@ My first application
 """
 import asyncio
 import io
-import sys
 import tempfile
 
 import matplotlib.pyplot as plt
