@@ -110,6 +110,7 @@ class HelloWorld(toga.App):
         self.boutonChart = toga.Button("Afficher le graphe", on_press=self.afficherGraphe)
 
         self.labelhttpx = toga.Label("False")
+        self.listeTempFile = []
 
         self.name_input = toga.TextInput(style=Pack(flex=1))
         self.name_input.placeholder = "Test"
@@ -134,6 +135,7 @@ class HelloWorld(toga.App):
         self.main_window.show()
         self.add_background_task(self.changeTitle)
         self.add_background_task(self.changeTrueTitle)
+        self.app.on_exit = self.fermerture
 
     def say_hello(self, widget):
         self.main_window.info_dialog(
@@ -148,6 +150,10 @@ class HelloWorld(toga.App):
     async def changeTrueTitle(self, widget):
         await asyncio.sleep(10)
         self.main_window.title = "Il est vraiment tard"
+
+    def fermerture(self, widget):
+        print("Au revoir")Aj
+        return True
 
 def greeting(name):
     if name:
