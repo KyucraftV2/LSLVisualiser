@@ -3,12 +3,11 @@ My first application
 """
 import asyncio
 import io
-import os
 import sys
+import tempfile
 
 import matplotlib.pyplot as plt
 import toga
-from PIL import Image
 from toga.style import Pack
 from toga.style.pack import COLUMN, ROW
 
@@ -46,25 +45,30 @@ class HelloWorld(toga.App):
         plt.figure()
         plt.pie(HelloWorld.dictVal[HelloWorld.valeurDict]['sizes'],
                 labels=HelloWorld.dictVal[HelloWorld.valeurDict]['labels'])
-        save = os.path.join(os.path.normpath(toga.App.app.paths.app), str(HelloWorld.nbGraphes) + ".png")
-        try:  # enleve l'ancien graph si il y en a un
+        try:
             self.main_box.remove(self.imageChart)
         except:
             pass
-        plt.savefig(save)  # sauvegarde le graph
-        HelloWorld.nbGraphes += 1  # incremente le nombre de graph
-        if HelloWorld.valeurDict < 5:  # incremente la valeur du dictionnaire
-            HelloWorld.valeurDict += 1  # si elle est inferieur a 5
-        elif HelloWorld.valeurDict == 5:  # sinon la remet a 1
-            HelloWorld.valeurDict = 1  # pour recommencer le cycle
-        plt.close()  # ferme le graph
+
+        buf = io.BytesIO()
+        plt.savefig(buf, format='png')
+        fp = tempfile.NamedTemporaryFile()
+        with open(f"{fp.name}.png", 'wb') as f:
+            f.write(buf.getvalue())
+        self.listeTempFile.append(fp.name)
+        HelloWorld.nbGraphes += 1
+        if HelloWorld.valeurDict < 5:
+            HelloWorld.valeurDict += 1
+        elif HelloWorld.valeurDict == 5:
+            HelloWorld.valeurDict = 1
+        plt.close()
 
     def afficherGraphe(self, widget):
         """
         Display the graph
         """
         self.createData()
-        save = os.path.join(os.path.normpath(toga.App.app.paths.app), str(HelloWorld.nbGraphes - 1) + ".png")
+        save = self.listeTempFile[HelloWorld.nbGraphes - 1] + ".png"
         self.image = toga.Image(save)
         self.imageChart = toga.ImageView(id='view1', image=self.image)
         self.main_box.add(self.imageChart)
@@ -78,7 +82,7 @@ class HelloWorld(toga.App):
     def regenGraphe(self, widget):
         yield 3
         self.createData()
-        save = os.path.join(os.path.normpath(toga.App.app.paths.app), str(HelloWorld.nbGraphes - 1) + ".png")
+        save = self.listeTempFile[HelloWorld.nbGraphes - 1] + ".png"
         self.image = toga.Image(save)
         self.imageChart = toga.ImageView(id='view1', image=self.image)
         self.main_box.add(self.imageChart)
@@ -161,18 +165,6 @@ class HelloWorld(toga.App):
         Function executing when the app is closing
         """
         print("Au revoir")
-        blank_img = Image.new('RGBA', size=(1, 1))
-        buffer = io.BytesIO()
-        blank_img.save(buffer, format='png', compress_level=0)
-        self.imageChart.image = toga.Image(data=buffer.getvalue())
-        save = os.path.normpath(toga.App.app.paths.app)
-        i = 0
-        for file in os.listdir(save):
-            if (file == str(i) + ".png"):
-                os.remove(os.path.join(os.path.normpath(toga.App.app.paths.app), file))
-                i += 1
-            if i > HelloWorld.nbGraphes:
-                break
         return True
 
     def closeTelephone(self, widget):
