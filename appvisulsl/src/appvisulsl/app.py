@@ -2,13 +2,13 @@
 My first application
 """
 import asyncio
+import io
 import os
 import sys
-import io
-from PIL import Image
 
 import matplotlib.pyplot as plt
 import toga
+from PIL import Image
 from toga.style import Pack
 from toga.style.pack import COLUMN, ROW
 
@@ -16,7 +16,7 @@ listeString = ["Il est tard mon ami"]
 
 
 class HelloWorld(toga.App):
-    nbGraphes = 0 # number of generated graph
+    nbGraphes = 0  # number of generated graph
     valeurDict = 1
     dictVal = {1: {
         'labels': ['Frogs', 'Hogs', 'Dogs', 'Logs'],
@@ -43,7 +43,7 @@ class HelloWorld(toga.App):
         """
         Generate pie chart
         """
-        fig = plt.figure()
+        plt.figure()
         plt.pie(HelloWorld.dictVal[HelloWorld.valeurDict]['sizes'],
                 labels=HelloWorld.dictVal[HelloWorld.valeurDict]['labels'])
         save = os.path.join(os.path.normpath(toga.App.app.paths.app), str(HelloWorld.nbGraphes) + ".png")
@@ -51,13 +51,13 @@ class HelloWorld(toga.App):
             self.main_box.remove(self.imageChart)
         except:
             pass
-        fig.savefig(save)  # sauvegarde le graph
+        plt.savefig(save)  # sauvegarde le graph
         HelloWorld.nbGraphes += 1  # incremente le nombre de graph
         if HelloWorld.valeurDict < 5:  # incremente la valeur du dictionnaire
             HelloWorld.valeurDict += 1  # si elle est inferieur a 5
         elif HelloWorld.valeurDict == 5:  # sinon la remet a 1
             HelloWorld.valeurDict = 1  # pour recommencer le cycle
-        plt.close(fig)  # ferme le graph
+        plt.close()  # ferme le graph
 
     def afficherGraphe(self, widget):
         """
@@ -75,7 +75,7 @@ class HelloWorld(toga.App):
             self.main_box.remove(self.boutonChart)
         self.add_background_task(self.regenGraphe)
 
-    def regenGraphe(self,widget):
+    def regenGraphe(self, widget):
         yield 3
         self.createData()
         save = os.path.join(os.path.normpath(toga.App.app.paths.app), str(HelloWorld.nbGraphes - 1) + ".png")
