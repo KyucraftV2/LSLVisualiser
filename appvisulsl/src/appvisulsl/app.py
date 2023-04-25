@@ -43,34 +43,18 @@ class HelloWorld(toga.App):
         """
         plt.pie(HelloWorld.dictVal[HelloWorld.valeurDict]['sizes'],
                 labels=HelloWorld.dictVal[HelloWorld.valeurDict]['labels'])
-        try:
-            save = os.path.join(os.path.normpath(toga.App.app.paths.app), str(HelloWorld.nbGraphes) + ".png")
-            try:
-                self.main_box.remove(self.imageChart)
-            except:
-                pass
-            plt.savefig(save)
-            HelloWorld.nbGraphes += 1
-            if HelloWorld.valeurDict < 5:
-                HelloWorld.valeurDict += 1
-            elif HelloWorld.valeurDict == 5:
-                HelloWorld.valeurDict = 1
-            plt.close()
+        save = os.path.join(os.path.normpath(toga.App.app.paths.app), str(HelloWorld.nbGraphes) + ".png")
+        try:  # enleve l'ancien graph si il y en a un
+            self.main_box.remove(self.imageChart)
         except:
-            save = os.path.join(os.path.normpath(toga.App.app.paths.app), str(HelloWorld.nbGraphes) + ".png")
-            try:
-                self.main_box.remove(self.imageChart)
-                self.imageChart = None
-                self.image = None
-            except:
-                pass
-            plt.savefig(save)
-            HelloWorld.nbGraphes += 1
-            if HelloWorld.valeurDict < 5:
-                HelloWorld.valeurDict += 1
-            elif HelloWorld.valeurDict == 5:
-                HelloWorld.valeurDict = 1
-            plt.close()
+            pass
+        plt.savefig(save)  # sauvegarde le graph
+        HelloWorld.nbGraphes += 1  # incremente le nombre de graph
+        if HelloWorld.valeurDict < 5:  # incremente la valeur du dictionnaire
+            HelloWorld.valeurDict += 1  # si elle est inferieur a 5
+        elif HelloWorld.valeurDict == 5:  # sinon la remet a 1
+            HelloWorld.valeurDict = 1  # pour recommencer le cycle
+        plt.close()  # ferme le graph
 
     def afficherGraphe(self, widget):
         """
@@ -174,17 +158,17 @@ class HelloWorld(toga.App):
         Function executing when the app is closing
         """
         print("Au revoir")
-        # save = os.path.normpath(toga.App.app.paths.app)
-        # i = 0
-        # self.main_box.remove(self.imageChart)
-        # self.image = toga.Image(os.path.join(os.path.normpath(toga.App.app.paths.app), str(HelloWorld.nbGraphes-1)+".png"))
-        # self.imageChart = toga.ImageView(image=self.image)
-        # for file in os.listdir(save):
-        #     if (file == str(i) + ".png"):
-        #         os.remove(os.path.join(os.path.normpath(toga.App.app.paths.app), file))
-        #         i += 1
-        #     if i > HelloWorld.nbGraphes:
-        #         break
+        save = os.path.normpath(toga.App.app.paths.app)
+        i = 0
+        for file in os.listdir(save):
+            if (file == str(i) + ".png"):
+                try:
+                    os.remove(os.path.join(os.path.normpath(toga.App.app.paths.app), file))
+                except:
+                    print(f"erreur lors de la suppression de {file}")
+                i += 1
+            if i > HelloWorld.nbGraphes:
+                break
         return True
 
     def closeTelephone(self, widget):
