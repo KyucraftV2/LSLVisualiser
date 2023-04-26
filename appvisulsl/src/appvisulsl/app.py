@@ -82,8 +82,6 @@ class HelloWorld(toga.App):
         self.image = toga.Image(save)
         self.imageChart = toga.ImageView(id='view1', image=self.image)
         self.main_box.add(self.imageChart)
-        self.main_window.content = self.main_box
-        self.main_window.show()
 
         # Remove the button
         if HelloWorld.nbGraphes >= 1:
@@ -93,11 +91,11 @@ class HelloWorld(toga.App):
         # Start the background task
         self.add_background_task(self.regenGraphe)
 
-    def regenGraphe(self, widget):
+    async def regenGraphe(self, widget):
         """
         Regenerate the graph every 3 seconds
         """
-        yield 3
+        await asyncio.sleep(3)
         # Create the graph
         self.createData()
 
@@ -106,8 +104,6 @@ class HelloWorld(toga.App):
         self.image = toga.Image(save)
         self.imageChart = toga.ImageView(id='view1', image=self.image)
         self.main_box.add(self.imageChart)
-        self.main_window.content = self.main_box
-        self.main_window.show()
 
         # Start the background task
         self.add_background_task(self.regenGraphe)
@@ -126,7 +122,7 @@ class HelloWorld(toga.App):
             on_press=self.say_hello,
             style=Pack(padding=5)
         )
-        self.boutonRecordDonnes = toga.Button("Record", on_press=self.printData)
+        self.boutonRecordDonnes = toga.Button("Record", on_press=self.startRecord)
 
         # Create the label
         self.labelhttpx = toga.Label("False")
@@ -194,27 +190,27 @@ class HelloWorld(toga.App):
         await asyncio.sleep(10)
         self.main_window.title = "Il est vraiment tard"
 
-    def printData(self, widget):
+    def startRecord(self, widget):
         print("looking for eeg streams")
         # streams = resolve_stream('type', 'eeg')
         # inlet = stream_inlet(streams[0])
         print('lecture des données')
         self.boutonStop = toga.Button('Stop record', on_press=self.stopRecord)
         self.main_box.add(self.boutonStop)
-        self.add_background_task(self.printDaata)
+        self.add_background_task(self.showData)
 
     def stopRecord(self, widget):
         HelloWorld.boucle = False
 
-    async def printDaata(self, widget):
+    async def showData(self, widget):
         await asyncio.sleep(0.001)
         try:
             self.main_box.remove(self.boutonRecordDonnes)
         except:
             pass
-        print("hello")
+        print(f"App says hello")
         if HelloWorld.boucle:
-            self.add_background_task(self.printDaata)
+            self.add_background_task(self.showData)
         else:
             try:
                 self.main_box.remove(self.boutonStop)
