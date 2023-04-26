@@ -10,6 +10,7 @@ import toga
 from toga.style import Pack
 from toga.style.pack import COLUMN, ROW
 from pylsl import *
+import pyxdf
 
 listeString = ["Il est tard mon ami"]
 
@@ -159,8 +160,8 @@ class HelloWorld(toga.App):
         self.add_background_task(self.changeTrueTitle)
 
         # test XDF
-        # data,header = pyxdf.load_xdf(r"C:\Users\killian\Documents\GitHub\LSLVisualiser\appvisulsl\src\appvisulsl\resources\data.xdf")
-        # print(data)
+        data,header = pyxdf.load_xdf(r"C:\Users\killian\Documents\GitHub\LSLVisualiser\appvisulsl\src\appvisulsl\resources\data.xdf")
+        print(data)
 
         # test LSL
         outlet = StreamInfo(name='myStream', type='EEG', channel_count=8)
@@ -188,6 +189,15 @@ class HelloWorld(toga.App):
         """
         await asyncio.sleep(10)
         self.main_window.title = "Il est vraiment tard"
+
+    async def printData(self,widget):
+        print("looking for eeg streams")
+        streams =resolve_stream('type','eeg')
+        inlet = stream_inlet(streams[0])
+        print('lecture des données')
+        while True:
+            sample,timestamp = inlet.pull_sample()
+            print(sample,timestamp)
 
 
 def greeting(name):

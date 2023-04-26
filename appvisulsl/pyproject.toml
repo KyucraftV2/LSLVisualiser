@@ -24,6 +24,8 @@ test_sources = [
 requires = [
     "matplotlib==3.6.0",
     "pylsl",
+    "setuptools",
+    "pyxdf",
 ]
 test_requires = [
     "pytest",
