@@ -6,18 +6,19 @@ import io
 import tempfile
 
 import matplotlib.pyplot as plt
+import pyxdf
 import toga
+from pylsl import *
 from toga.style import Pack
 from toga.style.pack import COLUMN, ROW
-from pylsl import *
-import pyxdf
 
 listeString = ["Il est tard mon ami"]
 
 
 class HelloWorld(toga.App):
     nbGraphes = 0  # number of generated graph
-    valeurDict = 1 # temporary variable for testing app
+    valeurDict = 1  # temporary variable for testing app
+    boucle = True
     dictVal = {1: {
         'labels': ['Frogs', 'Hogs', 'Dogs', 'Logs'],
         'sizes': [35, 9, 19, 37]
@@ -43,7 +44,7 @@ class HelloWorld(toga.App):
         """
         Generate pie chart
         """
-        #Create the figure
+        # Create the figure
         plt.figure()
         plt.pie(HelloWorld.dictVal[HelloWorld.valeurDict]['sizes'],
                 labels=HelloWorld.dictVal[HelloWorld.valeurDict]['labels'])
@@ -115,7 +116,7 @@ class HelloWorld(toga.App):
         """
         Construct and show the Toga application.
         """
-        #Create the main box
+        # Create the main box
         self.main_box = toga.Box(style=Pack(direction=COLUMN))
 
         # Create the button
@@ -125,6 +126,7 @@ class HelloWorld(toga.App):
             on_press=self.say_hello,
             style=Pack(padding=5)
         )
+        self.boutonRecordDonnes = toga.Button("Record", on_press=self.printData)
 
         # Create the label
         self.labelhttpx = toga.Label("False")
@@ -149,6 +151,7 @@ class HelloWorld(toga.App):
         self.main_box.add(name_box)
         self.main_box.add(button)
         self.main_box.add(self.boutonChart)
+        self.main_box.add(self.boutonRecordDonnes)
 
         # Create the main window
         self.main_window = toga.MainWindow(title=self.formal_name)
@@ -160,7 +163,8 @@ class HelloWorld(toga.App):
         self.add_background_task(self.changeTrueTitle)
 
         # test XDF
-        data,header = pyxdf.load_xdf(r"C:\Users\killian\Documents\GitHub\LSLVisualiser\appvisulsl\src\appvisulsl\resources\data.xdf")
+        data, header = pyxdf.load_xdf(
+            r"C:\Users\killian\Documents\GitHub\LSLVisualiser\appvisulsl\src\appvisulsl\resources\data.xdf")
         print(data)
 
         # test LSL
@@ -190,14 +194,33 @@ class HelloWorld(toga.App):
         await asyncio.sleep(10)
         self.main_window.title = "Il est vraiment tard"
 
-    async def printData(self,widget):
+    def printData(self, widget):
         print("looking for eeg streams")
-        streams =resolve_stream('type','eeg')
-        inlet = stream_inlet(streams[0])
+        # streams = resolve_stream('type', 'eeg')
+        # inlet = stream_inlet(streams[0])
         print('lecture des données')
-        while True:
-            sample,timestamp = inlet.pull_sample()
-            print(sample,timestamp)
+        self.boutonStop = toga.Button('Stop record', on_press=self.stopRecord)
+        self.main_box.add(self.boutonStop)
+        self.add_background_task(self.printDaata)
+    def stopRecord(self, widget):
+        HelloWorld.boucle = False
+
+    async def printDaata(self,widget):
+        await asyncio.sleep(0.001)
+        try:
+            self.main_box.remove(self.boutonRecordDonnes)
+        except:
+            pass
+        print("hello")
+        if HelloWorld.boucle:
+            self.add_background_task(self.printDaata)
+        else:
+            try:
+                self.main_box.remove(self.boutonStop)
+            except:
+                pass
+            self.main_box.add(self.boutonRecordDonnes)
+
 
 
 def greeting(name):
