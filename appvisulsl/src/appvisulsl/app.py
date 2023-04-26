@@ -29,6 +29,8 @@ class HelloWorld(toga.App):
         # Create the figure
         plt.figure()
         plt.pie(HelloWorld.tab_val, labels=HelloWorld.labels)
+        print(HelloWorld.tab_val)
+        print(HelloWorld.nbGraphes)
         # Trying to remove the previous graph
         try:
             self.main_box.remove(self.imageChart)
@@ -43,6 +45,7 @@ class HelloWorld(toga.App):
             f.write(buf.getvalue())
         self.listeTempFile.append(fp.name)
 
+        HelloWorld.nbGraphes+=1
         plt.close()
 
     def afficherGraphe(self, widget):
@@ -183,7 +186,7 @@ class HelloWorld(toga.App):
             self.main_box.remove(self.boutonRecordDonnes)
         except:
             pass
-        HelloWorld.tab_val[(HelloWorld.nbGraphes%4)+1] = randint(1,25)
+        HelloWorld.tab_val[HelloWorld.nbGraphes%4] = randint(1,25)
         if HelloWorld.boucle:
             self.add_background_task(self.showData)
         else:
