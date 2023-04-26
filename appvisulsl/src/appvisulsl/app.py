@@ -11,34 +11,16 @@ import toga
 from pylsl import *
 from toga.style import Pack
 from toga.style.pack import COLUMN, ROW
+from random import randint
 
 listeString = ["Il est tard mon ami"]
 
 
 class HelloWorld(toga.App):
     nbGraphes = 0  # number of generated graph
-    valeurDict = 1  # temporary variable for testing app
     boucle = True
-    dictVal = {1: {
-        'labels': ['Frogs', 'Hogs', 'Dogs', 'Logs'],
-        'sizes': [35, 9, 19, 37]
-    },
-        2: {
-            'labels': ['Frogs', 'Hogs', 'Dogs', 'Logs'],
-            'sizes': [19, 33, 21, 27]
-        },
-        3: {
-            'labels': ['Frogs', 'Hogs', 'Dogs', 'Logs'],
-            'sizes': [20, 43, 28, 9]
-        },
-        4: {
-            'labels': ['Frogs', 'Hogs', 'Dogs', 'Logs'],
-            'sizes': [23, 5, 22, 50]
-        },
-        5: {
-            'labels': ['Frogs', 'Hogs', 'Dogs', 'Logs'],
-            'sizes': [15, 43, 23, 19]
-        }}
+    labels = ["Chien", "Chat", "Lion", "Tigre"]
+    tab_val = [25, 25, 25, 25]
 
     def createData(self):
         """
@@ -46,8 +28,7 @@ class HelloWorld(toga.App):
         """
         # Create the figure
         plt.figure()
-        plt.pie(HelloWorld.dictVal[HelloWorld.valeurDict]['sizes'],
-                labels=HelloWorld.dictVal[HelloWorld.valeurDict]['labels'])
+        plt.pie(HelloWorld.tab_val, labels=HelloWorld.labels)
         # Trying to remove the previous graph
         try:
             self.main_box.remove(self.imageChart)
@@ -62,12 +43,6 @@ class HelloWorld(toga.App):
             f.write(buf.getvalue())
         self.listeTempFile.append(fp.name)
 
-        # Update the number of graph
-        HelloWorld.nbGraphes += 1
-        if HelloWorld.valeurDict < 5:
-            HelloWorld.valeurDict += 1
-        elif HelloWorld.valeurDict == 5:
-            HelloWorld.valeurDict = 1
         plt.close()
 
     def afficherGraphe(self, widget):
@@ -208,7 +183,7 @@ class HelloWorld(toga.App):
             self.main_box.remove(self.boutonRecordDonnes)
         except:
             pass
-        print(f"App says hello")
+        HelloWorld.tab_val[(HelloWorld.nbGraphes%4)+1] = randint(1,25)
         if HelloWorld.boucle:
             self.add_background_task(self.showData)
         else:
