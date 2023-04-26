@@ -4,6 +4,7 @@ My first application
 import asyncio
 import io
 import tempfile
+from random import randint
 
 import matplotlib.pyplot as plt
 import pyxdf
@@ -11,7 +12,6 @@ import toga
 from pylsl import *
 from toga.style import Pack
 from toga.style.pack import COLUMN, ROW
-from random import randint
 
 listeString = ["Il est tard mon ami"]
 
@@ -19,8 +19,7 @@ listeString = ["Il est tard mon ami"]
 class HelloWorld(toga.App):
     nbGraphes = 0  # number of generated graph
     boucle = True
-    labels = ["Chien", "Chat", "Lion", "Tigre"]
-    tab_val = [25, 25, 25, 25]
+    tab_val = [0]
 
     def createData(self):
         """
@@ -28,9 +27,10 @@ class HelloWorld(toga.App):
         """
         # Create the figure
         plt.figure()
-        plt.pie(HelloWorld.tab_val, labels=HelloWorld.labels)
-        print(HelloWorld.tab_val)
-        print(HelloWorld.nbGraphes)
+        tab = [i for i in range(0, len(HelloWorld.tab_val))]
+        plt.plot(tab, HelloWorld.tab_val)
+        plt.xlabel("nbGraphes")
+        plt.ylabel("valeur")
         # Trying to remove the previous graph
         try:
             self.main_box.remove(self.imageChart)
@@ -40,12 +40,13 @@ class HelloWorld(toga.App):
         # Save the graph in a temporary file
         buf = io.BytesIO()
         plt.savefig(buf, format='png')
+        HelloWorld.tab_val = []
         fp = tempfile.NamedTemporaryFile()
         with open(f"{fp.name}.png", 'wb') as f:
             f.write(buf.getvalue())
         self.listeTempFile.append(fp.name)
 
-        HelloWorld.nbGraphes+=1
+        HelloWorld.nbGraphes += 1
         plt.close()
 
     def afficherGraphe(self, widget):
@@ -186,7 +187,7 @@ class HelloWorld(toga.App):
             self.main_box.remove(self.boutonRecordDonnes)
         except:
             pass
-        HelloWorld.tab_val[HelloWorld.nbGraphes%4] = randint(1,25)
+        HelloWorld.tab_val.append(randint(0,10))
         if HelloWorld.boucle:
             self.add_background_task(self.showData)
         else:
