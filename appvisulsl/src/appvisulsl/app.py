@@ -202,10 +202,11 @@ class HelloWorld(toga.App):
         self.boutonStop = toga.Button('Stop record', on_press=self.stopRecord)
         self.main_box.add(self.boutonStop)
         self.add_background_task(self.printDaata)
+
     def stopRecord(self, widget):
         HelloWorld.boucle = False
 
-    async def printDaata(self,widget):
+    async def printDaata(self, widget):
         await asyncio.sleep(0.001)
         try:
             self.main_box.remove(self.boutonRecordDonnes)
@@ -220,7 +221,7 @@ class HelloWorld(toga.App):
             except:
                 pass
             self.main_box.add(self.boutonRecordDonnes)
-
+            HelloWorld.boucle = True
 
 
 def greeting(name):
