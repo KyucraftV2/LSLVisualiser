@@ -18,7 +18,8 @@ listeString = ["Il est tard mon ami"]
 
 class HelloWorld(toga.App):
     nbGraphes = 0  # number of generated graph
-    boucle = True
+    isRecord = True
+    isGenerateGraph = False
     tab_val = [0]
     tab_timestamp = [0]
 
@@ -57,6 +58,10 @@ class HelloWorld(toga.App):
         # Create the graph
         self.createData()
 
+        # Create button
+        self.boutonStop = toga.Button("Stop", on_press=self.stopGenerateGraph)
+        self.main_box.add(self.boutonStop)
+
         # Display the graph
         save = self.listeTempFile[HelloWorld.nbGraphes - 1] + ".png"
         self.image = toga.Image(save)
@@ -70,6 +75,7 @@ class HelloWorld(toga.App):
 
         # Start the background task
         self.add_background_task(self.regenGraphe)
+        HelloWorld.isGenerateGraph = True
 
     async def regenGraphe(self, widget):
         """
@@ -86,7 +92,8 @@ class HelloWorld(toga.App):
         self.main_box.add(self.imageChart)
 
         # Start the background task
-        self.add_background_task(self.regenGraphe)
+        if HelloWorld.isGenerateGraph:
+            self.add_background_task(self.regenGraphe)
 
     def startup(self):
         """
@@ -179,7 +186,10 @@ class HelloWorld(toga.App):
         self.add_background_task(self.showData)
 
     def stopRecord(self, widget):
-        HelloWorld.boucle = False
+        HelloWorld.isRecord = False
+
+    def stopGenerateGraph(self,widget):
+        HelloWorld.isGenerateGraph = False
 
     async def showData(self, widget):
         await asyncio.sleep(0.001)
@@ -189,10 +199,13 @@ class HelloWorld(toga.App):
             pass
         inlet = stream_inlet(self.streams[0])
         samples,timestamp = inlet.pull_sample()
-        for sample in samples:
-            HelloWorld.tab_val.append(sample)
-            HelloWorld.tab_timestamp.append(timestamp)
-        if HelloWorld.boucle:
+        HelloWorld.tab_timestamp.append(timestamp)
+        HelloWorld.tab_val.append(samples[0])
+
+        # for sample in samples:
+        #     HelloWorld.tab_val.append(sample)
+        #     HelloWorld.tab_timestamp.append(timestamp)
+        if HelloWorld.isRecord:
             self.add_background_task(self.showData)
         else:
             try:
@@ -200,7 +213,7 @@ class HelloWorld(toga.App):
             except:
                 pass
             self.main_box.add(self.boutonRecordDonnes)
-            HelloWorld.boucle = True
+            HelloWorld.isRecord = True
 
 
 def greeting(name):
