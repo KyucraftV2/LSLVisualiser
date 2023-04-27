@@ -4,14 +4,12 @@ My first application
 import asyncio
 import io
 import tempfile
-from random import randint
 
 import matplotlib.pyplot as plt
-import pyxdf
 import toga
 from pylsl import *
 from toga.style import Pack
-from toga.style.pack import COLUMN, ROW
+from toga.style.pack import COLUMN
 
 listeString = ["Il est tard mon ami"]
 
@@ -30,8 +28,8 @@ class HelloWorld(toga.App):
         # Create the figure
         plt.figure()
         plt.plot(HelloWorld.tab_timestamp, HelloWorld.tab_val)
-        plt.xlabel("nbGraphes")
-        plt.ylabel("valeur")
+        plt.xlabel("timestamp")
+        plt.ylabel("value")
         # Trying to remove the previous graph
         try:
             self.main_box.remove(self.imageChart)
@@ -51,7 +49,7 @@ class HelloWorld(toga.App):
         HelloWorld.nbGraphes += 1
         plt.close()
 
-    def afficherGraphe(self, widget):
+    def displayGraph(self, widget):
         """
         Display the graph
         """
@@ -59,7 +57,7 @@ class HelloWorld(toga.App):
         self.createData()
 
         # Create button
-        self.boutonStop = toga.Button("Stop", on_press=self.stopGenerateGraph)
+        self.boutonStop = toga.Button("Stop generating graph", on_press=self.stopGenerateGraph)
         self.main_box.add(self.boutonStop)
 
         # Display the graph
@@ -74,10 +72,10 @@ class HelloWorld(toga.App):
             self.main_box.remove(self.boutonChart)
 
         # Start the background task
-        self.add_background_task(self.regenGraphe)
+        self.add_background_task(self.regenGraph)
         HelloWorld.isGenerateGraph = True
 
-    async def regenGraphe(self, widget):
+    async def regenGraph(self, widget):
         """
         Regenerate the graph every 3 seconds
         """
@@ -93,7 +91,7 @@ class HelloWorld(toga.App):
 
         # Start the background task
         if HelloWorld.isGenerateGraph:
-            self.add_background_task(self.regenGraphe)
+            self.add_background_task(self.regenGraph)
 
     def startup(self):
         """
@@ -103,36 +101,13 @@ class HelloWorld(toga.App):
         self.main_box = toga.Box(style=Pack(direction=COLUMN))
 
         # Create the button
-        self.boutonChart = toga.Button("Commencer la visualisation", on_press=self.afficherGraphe)
-        button = toga.Button(
-            "Say Hello!",
-            on_press=self.say_hello,
-            style=Pack(padding=5)
-        )
-        self.boutonRecordDonnes = toga.Button("Record", on_press=self.startRecord)
+        self.boutonChart = toga.Button("Start visualisation", on_press=self.displayGraph)
+        self.boutonRecordDonnes = toga.Button("Starting recording LSL", on_press=self.startRecord)
 
-        # Create the label
-        self.labelhttpx = toga.Label("False")
-        name_label = toga.Label(
-            "Your name: ",
-            style=Pack(padding=(0, 5))
-        )
-
-        # Create the name input
-        self.name_input = toga.TextInput(style=Pack(flex=1))
-        self.name_input.placeholder = "Test"
-
+        # Create the list of temporary files
         self.listeTempFile = []
 
-        # Create the name box
-        name_box = toga.Box(style=Pack(direction=ROW, padding=5))
-        name_box.add(name_label)
-        name_box.add(self.name_input)
-
         # Add the elements to the main box
-        self.main_box.add(self.labelhttpx)
-        self.main_box.add(name_box)
-        self.main_box.add(button)
         self.main_box.add(self.boutonChart)
         self.main_box.add(self.boutonRecordDonnes)
 
@@ -141,64 +116,28 @@ class HelloWorld(toga.App):
         self.main_window.content = self.main_box
         self.main_window.show()
 
-        # Start the background task
-        self.add_background_task(self.changeTitle)
-        self.add_background_task(self.changeTrueTitle)
-
-        # test XDF
-        data, header = pyxdf.load_xdf(
-            r"C:\Users\killian\Documents\GitHub\LSLVisualiser\appvisulsl\src\appvisulsl\resources\data.xdf")
-        print(data)
-
-        # test LSL
-        outlet = StreamInfo(name='myStream', type='EEG', channel_count=8)
-        print(outlet)
-
-    def say_hello(self, widget):
-        """
-        Respond to the click of the button by updating the label
-        """
-        self.main_window.info_dialog(
-            greeting(self.name_input.value),
-            "Hi there!",
-        )
-
-    def changeTitle(self, widget):
-        """
-        Change the title of the window after 3 seconds
-        """
-        yield 3
-        self.main_window.title = "Il est tard"
-
-    async def changeTrueTitle(self, widget):
-        """
-        Change again the title of the window after 10 seconds
-        """
-        await asyncio.sleep(10)
-        self.main_window.title = "Il est vraiment tard"
-
     def startRecord(self, widget):
         print("looking for eeg streams")
         self.streams = resolve_stream('type', 'EEG')
         print('lecture des données')
         self.boutonStop = toga.Button('Stop record', on_press=self.stopRecord)
         self.main_box.add(self.boutonStop)
-        self.add_background_task(self.showData)
+        self.add_background_task(self.recordData)
 
     def stopRecord(self, widget):
         HelloWorld.isRecord = False
 
-    def stopGenerateGraph(self,widget):
+    def stopGenerateGraph(self, widget):
         HelloWorld.isGenerateGraph = False
 
-    async def showData(self, widget):
+    async def recordData(self, widget):
         await asyncio.sleep(0.001)
         try:
             self.main_box.remove(self.boutonRecordDonnes)
         except:
             pass
         inlet = stream_inlet(self.streams[0])
-        samples,timestamp = inlet.pull_sample()
+        samples, timestamp = inlet.pull_sample()
         HelloWorld.tab_timestamp.append(timestamp)
         HelloWorld.tab_val.append(samples[0])
 
@@ -206,7 +145,7 @@ class HelloWorld(toga.App):
         #     HelloWorld.tab_val.append(sample)
         #     HelloWorld.tab_timestamp.append(timestamp)
         if HelloWorld.isRecord:
-            self.add_background_task(self.showData)
+            self.add_background_task(self.recordData)
         else:
             try:
                 self.main_box.remove(self.boutonStop)
@@ -214,13 +153,6 @@ class HelloWorld(toga.App):
                 pass
             self.main_box.add(self.boutonRecordDonnes)
             HelloWorld.isRecord = True
-
-
-def greeting(name):
-    if name:
-        return f"Hello, {name}"
-    else:
-        return "Hello, stranger"
 
 
 def main():
