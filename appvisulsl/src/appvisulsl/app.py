@@ -57,8 +57,8 @@ class HelloWorld(toga.App):
         self.createData()
 
         # Create button
-        self.boutonStop = toga.Button("Stop generating graph", on_press=self.stopGenerateGraph)
-        self.main_box.add(self.boutonStop)
+        self.boutonStopChart = toga.Button("Stop generating graph", on_press=self.stopGenerateGraph)
+        self.main_box.add(self.boutonStopChart)
 
         # Display the graph
         save = self.listeTempFile[HelloWorld.nbGraphes - 1] + ".png"
@@ -126,9 +126,14 @@ class HelloWorld(toga.App):
 
     def stopRecord(self, widget):
         HelloWorld.isRecord = False
+        self.main_box.remove(self.boutonStop)
+        self.main_box.add(self.boutonRecordDonnes)
+        self.main_window.show()
 
     def stopGenerateGraph(self, widget):
         HelloWorld.isGenerateGraph = False
+        self.main_box.remove(self.boutonStopChart)
+        self.main_box.add(self.boutonChart)
 
     async def recordData(self, widget):
         await asyncio.sleep(0.001)
