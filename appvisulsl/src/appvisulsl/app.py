@@ -11,8 +11,6 @@ from pylsl import *
 from toga.style import Pack
 from toga.style.pack import COLUMN
 
-listeString = ["Il est tard mon ami"]
-
 
 class HelloWorld(toga.App):
     nbGraphes = 0  # number of generated graph
@@ -68,7 +66,6 @@ class HelloWorld(toga.App):
 
         # Remove the button
         if HelloWorld.nbGraphes >= 1:
-            self.boutonChart.enabled = False
             self.main_box.remove(self.boutonChart)
 
         # Start the background task
