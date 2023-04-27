@@ -20,6 +20,7 @@ class HelloWorld(toga.App):
     nbGraphes = 0  # number of generated graph
     boucle = True
     tab_val = [0]
+    tab_timestamp = [0]
 
     def createData(self):
         """
@@ -27,8 +28,7 @@ class HelloWorld(toga.App):
         """
         # Create the figure
         plt.figure()
-        tab = [i for i in range(0, len(HelloWorld.tab_val))]
-        plt.plot(tab, HelloWorld.tab_val)
+        plt.plot(HelloWorld.tab_timestamp, HelloWorld.tab_val)
         plt.xlabel("nbGraphes")
         plt.ylabel("valeur")
         # Trying to remove the previous graph
@@ -41,6 +41,7 @@ class HelloWorld(toga.App):
         buf = io.BytesIO()
         plt.savefig(buf, format='png')
         HelloWorld.tab_val = []
+        HelloWorld.tab_timestamp = []
         fp = tempfile.NamedTemporaryFile()
         with open(f"{fp.name}.png", 'wb') as f:
             f.write(buf.getvalue())
@@ -171,8 +172,7 @@ class HelloWorld(toga.App):
 
     def startRecord(self, widget):
         print("looking for eeg streams")
-        # streams = resolve_stream('type', 'eeg')
-        # inlet = stream_inlet(streams[0])
+        self.streams = resolve_stream('type', 'EEG')
         print('lecture des données')
         self.boutonStop = toga.Button('Stop record', on_press=self.stopRecord)
         self.main_box.add(self.boutonStop)
@@ -187,7 +187,11 @@ class HelloWorld(toga.App):
             self.main_box.remove(self.boutonRecordDonnes)
         except:
             pass
-        HelloWorld.tab_val.append(randint(0,10))
+        inlet = stream_inlet(self.streams[0])
+        samples,timestamp = inlet.pull_sample()
+        for sample in samples:
+            HelloWorld.tab_val.append(sample)
+            HelloWorld.tab_timestamp.append(timestamp)
         if HelloWorld.boucle:
             self.add_background_task(self.showData)
         else:
