@@ -25,32 +25,35 @@ class AppLSLVisu(toga.App):
         """
         Generate data
         """
-        # Create the figure
-        plt.figure()
+        for stream in AppLSLVisu.tabStreams:
+            # Create the figure
+            plt.figure()
 
-        plt.plot(AppLSLVisu.tabTimestamp, AppLSLVisu.tabVal)
-        plt.xlabel("timestamp")
-        plt.ylabel("value")
-        # Trying to remove the previous graph
-        try:
-            self.mainBox.remove(self.imageGraph)
-        except:
-            pass
+            plt.plot(AppLSLVisu.tabTimestamp, AppLSLVisu.tabVal)
+            plt.xlabel("timestamp")
+            plt.ylabel("value")
+            plt.title(stream.name())
+            # Trying to remove the previous graph
+            try:
+                self.mainBox.remove(self.imageGraph)
+            except:
+                pass
 
-        # Save the graph in a temporary file
-        buf = io.BytesIO()
-        plt.savefig(buf, format='png')
-        if AppLSLVisu.nbGraphGenerated % 2 == 0:
-            AppLSLVisu.tabVal = AppLSLVisu.tabVal[AppLSLVisu.nbValPlot - 2:]
-            AppLSLVisu.tabTimestamp = AppLSLVisu.tabTimestamp[AppLSLVisu.nbValPlot - 2:]
-            AppLSLVisu.nbValPlot = 0
-        fp = tempfile.NamedTemporaryFile()
-        with open(f"{fp.name}.png", 'wb') as f:
-            f.write(buf.getvalue())
-        self.listeTempFile.append(fp.name)
+            # Save the graph in a temporary file
+            buf = io.BytesIO()
+            plt.savefig(buf, format='png')
+            if AppLSLVisu.nbGraphGenerated % 2 == 0:
+                AppLSLVisu.tabVal = AppLSLVisu.tabVal[AppLSLVisu.nbValPlot - 2:]
+                AppLSLVisu.tabTimestamp = AppLSLVisu.tabTimestamp[AppLSLVisu.nbValPlot - 2:]
+                AppLSLVisu.nbValPlot = 0
+            fp = tempfile.NamedTemporaryFile()
+            with open(f"{fp.name}.png", 'wb') as f:
+                f.write(buf.getvalue())
+            self.listeTempFile.append(fp.name)
+
+            plt.close()
 
         AppLSLVisu.nbGraphGenerated += 1
-        plt.close()
 
     def displayGraph(self, widget):
         """
@@ -129,8 +132,6 @@ class AppLSLVisu(toga.App):
         self.main_window.show()
 
     def startRecord(self, widget):
-        self.main_window.info_dialog("Searching for LSL streams", "Searching in progress")
-        self.streams = resolve_stream('type', 'EEG')
         self.buttonStopRecord = toga.Button('Stop record', on_press=self.stopRecord)
         self.boxButtonRecord.add(self.buttonStopRecord)
         self.add_background_task(self.recordData)
@@ -153,15 +154,12 @@ class AppLSLVisu(toga.App):
             self.boxButtonRecord.remove(self.buttonRecordData)
         except:
             pass
-        inlet = stream_inlet(self.streams[0])
-        samples, timestamp = inlet.pull_sample()
-        AppLSLVisu.tabTimestamp.append(timestamp)
-        AppLSLVisu.tabVal.append(samples[0])
+        for i in range(len(AppLSLVisu.tabStreams)):
+            inlet = stream_inlet(AppLSLVisu.tabStreams[i][0])
+            samples, timestamp = inlet.pull_sample()
+            AppLSLVisu.tabTimestamp[i].append(timestamp)
+            AppLSLVisu.tabVal[i].append(samples[0])
         AppLSLVisu.nbValPlot += 1
-        # for sample in samples:
-        #     HelloWorld.tab_val.append(sample)
-        #     HelloWorld.tab_timestamp.append(timestamp)
-        #     HelloWorld.nbValeurPlot += 1
         if AppLSLVisu.isRecord:
             self.add_background_task(self.recordData)
         else:
@@ -175,6 +173,8 @@ class AppLSLVisu(toga.App):
 
     def getStream(self, widget):
         AppLSLVisu.tabStreams = resolve_streams()
+        AppLSLVisu.tabVal = [[0] * len(AppLSLVisu.tabStreams)]
+        AppLSLVisu.tabTimestamp = [[0] * len(AppLSLVisu.tabStreams)]
 
 
 def main():
