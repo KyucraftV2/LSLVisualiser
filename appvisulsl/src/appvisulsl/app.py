@@ -12,43 +12,43 @@ from toga.style import Pack
 from toga.style.pack import COLUMN
 
 
-class HelloWorld(toga.App):
-    nbGraphes = 0  # number of generated graph
+class AppLSLVisu(toga.App):
+    nbGraphGenerated = 0  # number of generated graph
     isRecord = True
     isGenerateGraph = False
-    tab_val = [0]
-    tab_timestamp = [0]
-    nbValeurPlot = 0
+    tabVal = [0]
+    tabTimestamp = [0]
+    nbValPlot = 0
 
-    def createData(self):
+    def createGraph(self):
         """
-        Generate pie chart
+        Generate data
         """
         # Create the figure
         plt.figure()
 
-        plt.plot(HelloWorld.tab_timestamp, HelloWorld.tab_val)
+        plt.plot(AppLSLVisu.tabTimestamp, AppLSLVisu.tabVal)
         plt.xlabel("timestamp")
         plt.ylabel("value")
         # Trying to remove the previous graph
         try:
-            self.main_box.remove(self.imageChart)
+            self.mainBox.remove(self.imageGraph)
         except:
             pass
 
         # Save the graph in a temporary file
         buf = io.BytesIO()
         plt.savefig(buf, format='png')
-        if HelloWorld.nbGraphes % 2 == 0:
-            HelloWorld.tab_val = HelloWorld.tab_val[HelloWorld.nbValeurPlot - 2:]
-            HelloWorld.tab_timestamp = HelloWorld.tab_timestamp[HelloWorld.nbValeurPlot - 2:]
-            HelloWorld.nbValeurPlot = 0
+        if AppLSLVisu.nbGraphGenerated % 2 == 0:
+            AppLSLVisu.tabVal = AppLSLVisu.tabVal[AppLSLVisu.nbValPlot - 2:]
+            AppLSLVisu.tabTimestamp = AppLSLVisu.tabTimestamp[AppLSLVisu.nbValPlot - 2:]
+            AppLSLVisu.nbValPlot = 0
         fp = tempfile.NamedTemporaryFile()
         with open(f"{fp.name}.png", 'wb') as f:
             f.write(buf.getvalue())
         self.listeTempFile.append(fp.name)
 
-        HelloWorld.nbGraphes += 1
+        AppLSLVisu.nbGraphGenerated += 1
         plt.close()
 
     def displayGraph(self, widget):
@@ -56,25 +56,25 @@ class HelloWorld(toga.App):
         Display the graph
         """
         # Create the graph
-        self.createData()
+        self.createGraph()
 
         # Create button
         self.boutonStopChart = toga.Button("Stop generating graph", on_press=self.stopGenerateGraph)
-        self.box_bouton_chart.add(self.boutonStopChart)
+        self.boxButtonGraph.add(self.boutonStopChart)
 
         # Display the graph
-        save = self.listeTempFile[HelloWorld.nbGraphes - 1] + ".png"
+        save = self.listeTempFile[AppLSLVisu.nbGraphGenerated - 1] + ".png"
         self.image = toga.Image(save)
-        self.imageChart = toga.ImageView(id='view1', image=self.image)
-        self.main_box.add(self.imageChart)
+        self.imageGraph = toga.ImageView(id='view1', image=self.image)
+        self.mainBox.add(self.imageGraph)
 
         # Remove the button
-        if HelloWorld.nbGraphes >= 1:
-            self.box_bouton_chart.remove(self.boutonChart)
+        if AppLSLVisu.nbGraphGenerated >= 1:
+            self.boxButtonGraph.remove(self.buttonGraph)
 
         # Start the background task
         self.add_background_task(self.regenGraph)
-        HelloWorld.isGenerateGraph = True
+        AppLSLVisu.isGenerateGraph = True
 
     async def regenGraph(self, widget):
         """
@@ -82,16 +82,16 @@ class HelloWorld(toga.App):
         """
         await asyncio.sleep(3)
         # Create the graph
-        self.createData()
+        self.createGraph()
 
         # Display the graph
-        save = self.listeTempFile[HelloWorld.nbGraphes - 1] + ".png"
+        save = self.listeTempFile[AppLSLVisu.nbGraphGenerated - 1] + ".png"
         self.image = toga.Image(save)
-        self.imageChart = toga.ImageView(id='view1', image=self.image)
-        self.main_box.add(self.imageChart)
+        self.imageGraph = toga.ImageView(id='view1', image=self.image)
+        self.mainBox.add(self.imageGraph)
 
         # Start the background task
-        if HelloWorld.isGenerateGraph:
+        if AppLSLVisu.isGenerateGraph:
             self.add_background_task(self.regenGraph)
 
     def startup(self):
@@ -99,73 +99,73 @@ class HelloWorld(toga.App):
         Construct and show the Toga application.
         """
         # Create boxes
-        self.main_box = toga.Box(style=Pack(direction=COLUMN))
-        self.box_bouton_chart = toga.Box(style=Pack(direction=COLUMN))
-        self.box_bouton_record = toga.Box(style=Pack(direction=COLUMN))
+        self.mainBox = toga.Box(style=Pack(direction=COLUMN))
+        self.boxButtonGraph = toga.Box(style=Pack(direction=COLUMN))
+        self.boxButtonRecord = toga.Box(style=Pack(direction=COLUMN))
 
         # Create the button
-        self.boutonChart = toga.Button("Start visualisation", on_press=self.displayGraph)
-        self.boutonRecordDonnes = toga.Button("Starting recording LSL", on_press=self.startRecord)
+        self.buttonGraph = toga.Button("Start visualisation", on_press=self.displayGraph)
+        self.buttonRecordData = toga.Button("Starting recording LSL", on_press=self.startRecord)
 
         # Create the list of temporary files
         self.listeTempFile = []
 
         # Add the elements to the main box
-        self.box_bouton_chart.add(self.boutonChart)
-        self.box_bouton_record.add(self.boutonRecordDonnes)
-        self.main_box.add(self.box_bouton_chart)
-        self.main_box.add(self.box_bouton_record)
+        self.boxButtonGraph.add(self.buttonGraph)
+        self.boxButtonRecord.add(self.buttonRecordData)
+        self.mainBox.add(self.boxButtonGraph)
+        self.mainBox.add(self.boxButtonRecord)
 
         # Create the main window
-        self.main_window = toga.MainWindow(title=self.formal_name)
-        self.main_window.content = self.main_box
-        self.main_window.show()
+        self.mainWindow = toga.MainWindow(title=self.formal_name)
+        self.mainWindow.content = self.mainBox
+        self.mainWindow.show()
 
     def startRecord(self, widget):
-        self.main_window.info_dialog("Searching for LSL streams", "Searching in progress")
+        self.mainWindow.info_dialog("Searching for LSL streams", "Searching in progress")
         self.streams = resolve_stream('type', 'EEG')
-        self.boutonStop = toga.Button('Stop record', on_press=self.stopRecord)
-        self.box_bouton_record.add(self.boutonStop)
+        self.buttonStopRecord = toga.Button('Stop record', on_press=self.stopRecord)
+        self.boxButtonRecord.add(self.buttonStopRecord)
         self.add_background_task(self.recordData)
 
     def stopRecord(self, widget):
-        HelloWorld.isRecord = False
-        self.box_bouton_record.remove(self.boutonStop)
-        self.box_bouton_record.add(self.boutonRecordDonnes)
-        self.box_bouton_record.refresh()
+        AppLSLVisu.isRecord = False
+        self.boxButtonRecord.remove(self.buttonStopRecord)
+        self.boxButtonRecord.add(self.buttonRecordData)
+        self.boxButtonRecord.refresh()
 
     def stopGenerateGraph(self, widget):
-        HelloWorld.isGenerateGraph = False
-        self.box_bouton_chart.remove(self.boutonStopChart)
-        self.box_bouton_chart.add(self.boutonChart)
-        self.box_bouton_chart.refresh()
+        AppLSLVisu.isGenerateGraph = False
+        self.boxButtonGraph.remove(self.boutonStopChart)
+        self.boxButtonGraph.add(self.buttonGraph)
+        self.boxButtonGraph.refresh()
 
     async def recordData(self, widget):
         await asyncio.sleep(0.001)
         try:
-            self.box_bouton_record.remove(self.boutonRecordDonnes)
+            self.boxButtonRecord.remove(self.buttonRecordData)
         except:
             pass
         inlet = stream_inlet(self.streams[0])
         samples, timestamp = inlet.pull_sample()
-        HelloWorld.tab_timestamp.append(timestamp)
-        HelloWorld.tab_val.append(samples[0])
-        HelloWorld.nbValeurPlot += 1
-
+        AppLSLVisu.tabTimestamp.append(timestamp)
+        AppLSLVisu.tabVal.append(samples[0])
+        AppLSLVisu.nbValPlot += 1
         # for sample in samples:
         #     HelloWorld.tab_val.append(sample)
         #     HelloWorld.tab_timestamp.append(timestamp)
-        if HelloWorld.isRecord:
+        #     HelloWorld.nbValeurPlot += 1
+        if AppLSLVisu.isRecord:
             self.add_background_task(self.recordData)
         else:
             try:
-                self.box_bouton_record.remove(self.boutonStop)
+                self.boxButtonRecord.remove(self.buttonStopRecord)
             except:
                 pass
                 pass
-            self.box_bouton_record.add(self.boutonRecordDonnes)
-            HelloWorld.isRecord = True
+            self.boxButtonRecord.add(self.buttonRecordData)
+            AppLSLVisu.isRecord = True
 
 
 def main():
-    return HelloWorld()
+    return AppLSLVisu()
