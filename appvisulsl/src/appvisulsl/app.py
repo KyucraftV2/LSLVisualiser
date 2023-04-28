@@ -19,6 +19,7 @@ class AppLSLVisu(toga.App):
     tabVal = [0]
     tabTimestamp = [0]
     nbValPlot = 0
+    tabStreams = []
 
     def createGraph(self):
         """
@@ -102,27 +103,33 @@ class AppLSLVisu(toga.App):
         self.mainBox = toga.Box(style=Pack(direction=COLUMN))
         self.boxButtonGraph = toga.Box(style=Pack(direction=COLUMN))
         self.boxButtonRecord = toga.Box(style=Pack(direction=COLUMN))
+        self.boxButtonGetStream = toga.Box(style=Pack(direction=COLUMN))
 
         # Create the button
         self.buttonGraph = toga.Button("Start visualisation", on_press=self.displayGraph)
         self.buttonRecordData = toga.Button("Starting recording LSL", on_press=self.startRecord)
+        self.buttonGetStream = toga.Button("Get LSL streams", on_press=self.getStream)
 
         # Create the list of temporary files
         self.listeTempFile = []
 
-        # Add the elements to the main box
+        # Add the button to the box corresponding
         self.boxButtonGraph.add(self.buttonGraph)
         self.boxButtonRecord.add(self.buttonRecordData)
+        self.boxButtonGetStream.add(self.buttonGetStream)
+
+        # Add the boxes to the main box
         self.mainBox.add(self.boxButtonGraph)
         self.mainBox.add(self.boxButtonRecord)
+        self.mainBox.add(self.boxButtonGetStream)
 
         # Create the main window
-        self.mainWindow = toga.MainWindow(title=self.formal_name)
-        self.mainWindow.content = self.mainBox
-        self.mainWindow.show()
+        self.main_window = toga.MainWindow(title=self.formal_name)
+        self.main_window.content = self.mainBox
+        self.main_window.show()
 
     def startRecord(self, widget):
-        self.mainWindow.info_dialog("Searching for LSL streams", "Searching in progress")
+        self.main_window.info_dialog("Searching for LSL streams", "Searching in progress")
         self.streams = resolve_stream('type', 'EEG')
         self.buttonStopRecord = toga.Button('Stop record', on_press=self.stopRecord)
         self.boxButtonRecord.add(self.buttonStopRecord)
@@ -165,6 +172,9 @@ class AppLSLVisu(toga.App):
                 pass
             self.boxButtonRecord.add(self.buttonRecordData)
             AppLSLVisu.isRecord = True
+
+    def getStream(self, widget):
+        AppLSLVisu.tabStreams = resolve_streams()
 
 
 def main():
