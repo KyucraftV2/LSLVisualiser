@@ -18,6 +18,7 @@ class HelloWorld(toga.App):
     isGenerateGraph = False
     tab_val = [0]
     tab_timestamp = [0]
+    nbValeurPlot = 0
 
     def createData(self):
         """
@@ -25,6 +26,7 @@ class HelloWorld(toga.App):
         """
         # Create the figure
         plt.figure()
+
         plt.plot(HelloWorld.tab_timestamp, HelloWorld.tab_val)
         plt.xlabel("timestamp")
         plt.ylabel("value")
@@ -37,8 +39,9 @@ class HelloWorld(toga.App):
         # Save the graph in a temporary file
         buf = io.BytesIO()
         plt.savefig(buf, format='png')
-        HelloWorld.tab_val = []
-        HelloWorld.tab_timestamp = []
+        HelloWorld.tab_val = HelloWorld.tab_val[HelloWorld.nbValeurPlot-2:]
+        HelloWorld.tab_timestamp = HelloWorld.tab_timestamp[HelloWorld.nbValeurPlot-2:]
+        HelloWorld.nbValeurPlot = 0
         fp = tempfile.NamedTemporaryFile()
         with open(f"{fp.name}.png", 'wb') as f:
             f.write(buf.getvalue())
@@ -114,9 +117,8 @@ class HelloWorld(toga.App):
         self.main_window.show()
 
     def startRecord(self, widget):
-        print("looking for eeg streams")
+        self.main_window.info_dialog("Searching for LSL streams","Searching in progress")
         self.streams = resolve_stream('type', 'EEG')
-        print('lecture des données')
         self.boutonStop = toga.Button('Stop record', on_press=self.stopRecord)
         self.main_box.add(self.boutonStop)
         self.add_background_task(self.recordData)
@@ -131,6 +133,7 @@ class HelloWorld(toga.App):
         HelloWorld.isGenerateGraph = False
         self.main_box.remove(self.boutonStopChart)
         self.main_box.add(self.boutonChart)
+        self.main_window.show()
 
     async def recordData(self, widget):
         await asyncio.sleep(0.001)
@@ -142,6 +145,7 @@ class HelloWorld(toga.App):
         samples, timestamp = inlet.pull_sample()
         HelloWorld.tab_timestamp.append(timestamp)
         HelloWorld.tab_val.append(samples[0])
+        HelloWorld.nbValeurPlot += 1
 
         # for sample in samples:
         #     HelloWorld.tab_val.append(sample)
