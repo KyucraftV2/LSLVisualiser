@@ -71,7 +71,7 @@ class AppLSLVisu(toga.App):
         for i in range(len(AppLSLVisu.tabStreams)):
             save = self.listTempFile[AppLSLVisu.nbGraphGenerated - 1] + ".png"
             self.image = toga.Image(save)
-            self.imageGraph = toga.ImageView(id=f'view{i}', image=self.image)
+            self.imageGraph = toga.ImageView(id=f'view{i+1}', image=self.image)
             self.listImgGraph[i] = self.imageGraph
             self.mainBox.add(self.listImgGraph[i])
 
