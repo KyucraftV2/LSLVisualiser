@@ -117,14 +117,12 @@ class AppLSLVisu(toga.App):
         self.listeTempFile = []
 
         # Add the button to the box corresponding
-        self.boxButtonGraph.add(self.buttonGraph)
-        self.boxButtonRecord.add(self.buttonRecordData)
         self.boxButtonGetStream.add(self.buttonGetStream)
 
         # Add the boxes to the main box
+        self.mainBox.add(self.boxButtonGetStream)
         self.mainBox.add(self.boxButtonGraph)
         self.mainBox.add(self.boxButtonRecord)
-        self.mainBox.add(self.boxButtonGetStream)
 
         # Create the main window
         self.main_window = toga.MainWindow(title=self.formal_name)
@@ -175,6 +173,8 @@ class AppLSLVisu(toga.App):
         AppLSLVisu.tabStreams = resolve_streams()
         AppLSLVisu.tabVal = [[0] * len(AppLSLVisu.tabStreams)]
         AppLSLVisu.tabTimestamp = [[0] * len(AppLSLVisu.tabStreams)]
+        self.boxButtonGraph.add(self.buttonGraph)
+        self.boxButtonRecord.add(self.buttonRecordData)
 
 
 def main():
