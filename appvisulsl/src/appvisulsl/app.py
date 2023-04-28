@@ -74,6 +74,7 @@ class AppLSLVisu(toga.App):
             self.image = toga.Image(save)
             self.imageGraph = toga.ImageView(id=f'view{i+1}', image=self.image)
             self.listImgGraph[i] = self.imageGraph
+            print(i)
 
         for graph in self.listImgGraph:
             self.mainBox.add(graph)
@@ -100,7 +101,9 @@ class AppLSLVisu(toga.App):
             self.image = toga.Image(save)
             self.imageGraph = toga.ImageView(id=f'view{i+1}', image=self.image)
             self.listImgGraph[i] = self.imageGraph
-            self.mainBox.add(self.listImgGraph[i])
+
+        for graph in self.listImgGraph:
+            self.mainBox.add(graph)
 
         # Start the background task
         if AppLSLVisu.isGenerateGraph:
