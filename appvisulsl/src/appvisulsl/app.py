@@ -28,7 +28,7 @@ class AppLSLVisu(toga.App):
         for i in range(len(AppLSLVisu.tabStreams)):
             # Create the figure and the plot
             plt.figure()
-            plt.plot(AppLSLVisu.tabTimestamp, AppLSLVisu.tabVal)
+            plt.plot(AppLSLVisu.tabTimestamp[i], AppLSLVisu.tabVal[i])
             plt.xlabel("timestamp")
             plt.ylabel("value")
             plt.title("Graph of the stream " + AppLSLVisu.tabStreams[i].name())
@@ -43,9 +43,9 @@ class AppLSLVisu(toga.App):
             # Save the graph in a temporary file
             buf = io.BytesIO()
             plt.savefig(buf, format='png')
-            if AppLSLVisu.nbGraphGenerated % 2 == 0 and len(AppLSLVisu.tabTimestamp) > 2:
-                AppLSLVisu.tabVal = AppLSLVisu.tabVal[i][AppLSLVisu.nbValPlot - 2:]
-                AppLSLVisu.tabTimestamp = AppLSLVisu.tabTimestamp[i][AppLSLVisu.nbValPlot - 2:]
+            if AppLSLVisu.nbGraphGenerated % 2 == 0  and len(AppLSLVisu.tabTimestamp[1]) > 2:
+                AppLSLVisu.tabVal[i] = AppLSLVisu.tabVal[i][AppLSLVisu.nbValPlot - 2:]
+                AppLSLVisu.tabTimestamp[i] = AppLSLVisu.tabTimestamp[i][AppLSLVisu.nbValPlot - 2:]
                 AppLSLVisu.nbValPlot = 0
             fp = tempfile.NamedTemporaryFile()
             fp.name = fp.name + AppLSLVisu.tabStreams[i].name()
