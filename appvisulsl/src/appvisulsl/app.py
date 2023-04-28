@@ -39,7 +39,7 @@ class HelloWorld(toga.App):
         # Save the graph in a temporary file
         buf = io.BytesIO()
         plt.savefig(buf, format='png')
-        if HelloWorld.nbGraphes %2==0:
+        if HelloWorld.nbGraphes % 2 == 0:
             HelloWorld.tab_val = HelloWorld.tab_val[HelloWorld.nbValeurPlot - 2:]
             HelloWorld.tab_timestamp = HelloWorld.tab_timestamp[HelloWorld.nbValeurPlot - 2:]
             HelloWorld.nbValeurPlot = 0
@@ -60,7 +60,7 @@ class HelloWorld(toga.App):
 
         # Create button
         self.boutonStopChart = toga.Button("Stop generating graph", on_press=self.stopGenerateGraph)
-        self.main_box.add(self.boutonStopChart)
+        self.box_bouton_chart.add(self.boutonStopChart)
 
         # Display the graph
         save = self.listeTempFile[HelloWorld.nbGraphes - 1] + ".png"
@@ -70,7 +70,7 @@ class HelloWorld(toga.App):
 
         # Remove the button
         if HelloWorld.nbGraphes >= 1:
-            self.main_box.remove(self.boutonChart)
+            self.box_bouton_chart.remove(self.boutonChart)
 
         # Start the background task
         self.add_background_task(self.regenGraph)
@@ -98,8 +98,10 @@ class HelloWorld(toga.App):
         """
         Construct and show the Toga application.
         """
-        # Create the main box
+        # Create boxes
         self.main_box = toga.Box(style=Pack(direction=COLUMN))
+        self.box_bouton_chart = toga.Box(style=Pack(direction=COLUMN))
+        self.box_bouton_record = toga.Box(style=Pack(direction=COLUMN))
 
         # Create the button
         self.boutonChart = toga.Button("Start visualisation", on_press=self.displayGraph)
@@ -109,8 +111,10 @@ class HelloWorld(toga.App):
         self.listeTempFile = []
 
         # Add the elements to the main box
-        self.main_box.add(self.boutonChart)
-        self.main_box.add(self.boutonRecordDonnes)
+        self.box_bouton_chart.add(self.boutonChart)
+        self.box_bouton_record.add(self.boutonRecordDonnes)
+        self.main_box.add(self.box_bouton_chart)
+        self.main_box.add(self.box_bouton_record)
 
         # Create the main window
         self.main_window = toga.MainWindow(title=self.formal_name)
@@ -118,28 +122,28 @@ class HelloWorld(toga.App):
         self.main_window.show()
 
     def startRecord(self, widget):
-        self.main_window.info_dialog("Searching for LSL streams","Searching in progress")
+        self.main_window.info_dialog("Searching for LSL streams", "Searching in progress")
         self.streams = resolve_stream('type', 'EEG')
         self.boutonStop = toga.Button('Stop record', on_press=self.stopRecord)
-        self.main_box.add(self.boutonStop)
+        self.box_bouton_record.add(self.boutonStop)
         self.add_background_task(self.recordData)
 
     def stopRecord(self, widget):
         HelloWorld.isRecord = False
-        self.main_box.remove(self.boutonStop)
-        self.main_box.add(self.boutonRecordDonnes)
-        self.main_window.show()
+        self.box_bouton_record.remove(self.boutonStop)
+        self.box_bouton_record.add(self.boutonRecordDonnes)
+        self.box_bouton_record.refresh()
 
     def stopGenerateGraph(self, widget):
         HelloWorld.isGenerateGraph = False
-        self.main_box.remove(self.boutonStopChart)
-        self.main_box.add(self.boutonChart)
-        self.main_window.show()
+        self.box_bouton_chart.remove(self.boutonStopChart)
+        self.box_bouton_chart.add(self.boutonChart)
+        self.box_bouton_chart.refresh()
 
     async def recordData(self, widget):
         await asyncio.sleep(0.001)
         try:
-            self.main_box.remove(self.boutonRecordDonnes)
+            self.box_bouton_record.remove(self.boutonRecordDonnes)
         except:
             pass
         inlet = stream_inlet(self.streams[0])
@@ -155,10 +159,11 @@ class HelloWorld(toga.App):
             self.add_background_task(self.recordData)
         else:
             try:
-                self.main_box.remove(self.boutonStop)
+                self.box_bouton_record.remove(self.boutonStop)
             except:
                 pass
-            self.main_box.add(self.boutonRecordDonnes)
+                pass
+            self.box_bouton_record.add(self.boutonRecordDonnes)
             HelloWorld.isRecord = True
 
 
