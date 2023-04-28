@@ -74,7 +74,6 @@ class AppLSLVisu(toga.App):
             self.image = toga.Image(save)
             self.imageGraph = toga.ImageView(id=f'view{i + 1}', image=self.image)
             self.listImgGraph[i] = self.imageGraph
-            print(i)
 
         for graph in self.listImgGraph:
             self.mainBox.add(graph)
@@ -169,7 +168,6 @@ class AppLSLVisu(toga.App):
         for i in range(len(AppLSLVisu.tabStreams)):
             inlet = stream_inlet(AppLSLVisu.tabStreams[i])
             samples, timestamp = inlet.pull_sample()
-            print(AppLSLVisu.tabTimestamp)
             AppLSLVisu.tabTimestamp[i].append(timestamp)
             AppLSLVisu.tabVal[i].append(samples[0])
         AppLSLVisu.nbValPlot += 1
@@ -188,8 +186,6 @@ class AppLSLVisu(toga.App):
         AppLSLVisu.tabStreams = resolve_streams()
         AppLSLVisu.tabVal = [[0]] * len(AppLSLVisu.tabStreams)
         AppLSLVisu.tabTimestamp = [[0]] * len(AppLSLVisu.tabStreams)
-        print(AppLSLVisu.tabTimestamp)
-        print(AppLSLVisu.tabVal)
         self.listImgGraph = [0] * len(AppLSLVisu.tabStreams)
         self.boxButtonGraph.add(self.buttonGraph)
         self.boxButtonRecord.add(self.buttonRecordData)
