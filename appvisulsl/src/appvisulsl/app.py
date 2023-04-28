@@ -43,7 +43,7 @@ class AppLSLVisu(toga.App):
             # Save the graph in a temporary file
             buf = io.BytesIO()
             plt.savefig(buf, format='png')
-            if AppLSLVisu.nbGraphGenerated % 2 == 0  and len(AppLSLVisu.tabTimestamp[1]) > 2:
+            if AppLSLVisu.nbGraphGenerated % 2 == 0 and len(AppLSLVisu.tabTimestamp[1]) > 2:
                 AppLSLVisu.tabVal[i] = AppLSLVisu.tabVal[i][AppLSLVisu.nbValPlot - 2:]
                 AppLSLVisu.tabTimestamp[i] = AppLSLVisu.tabTimestamp[i][AppLSLVisu.nbValPlot - 2:]
                 AppLSLVisu.nbValPlot = 0
