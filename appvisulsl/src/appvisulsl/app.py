@@ -25,14 +25,14 @@ class AppLSLVisu(toga.App):
         """
         Generate data
         """
-        for stream in AppLSLVisu.tabStreams:
-            # Create the figure
+        for i in range(len(AppLSLVisu.tabStreams)):
+            # Create the figure and the plot
             plt.figure()
-
             plt.plot(AppLSLVisu.tabTimestamp, AppLSLVisu.tabVal)
             plt.xlabel("timestamp")
             plt.ylabel("value")
-            plt.title(stream.name())
+            plt.title("Graph of the stream " + AppLSLVisu.tabStreams[i].name())
+
             # Trying to remove the previous graph
             try:
                 self.mainBox.remove(self.imageGraph)
@@ -47,9 +47,10 @@ class AppLSLVisu(toga.App):
                 AppLSLVisu.tabTimestamp = AppLSLVisu.tabTimestamp[AppLSLVisu.nbValPlot - 2:]
                 AppLSLVisu.nbValPlot = 0
             fp = tempfile.NamedTemporaryFile()
+            fp.name = fp.name + AppLSLVisu.tabStreams[i].name()
             with open(f"{fp.name}.png", 'wb') as f:
                 f.write(buf.getvalue())
-            self.listeTempFile.append(fp.name)
+            self.listTempFile.append(fp.name)
 
             plt.close()
 
@@ -67,10 +68,12 @@ class AppLSLVisu(toga.App):
         self.boxButtonGraph.add(self.boutonStopChart)
 
         # Display the graph
-        save = self.listeTempFile[AppLSLVisu.nbGraphGenerated - 1] + ".png"
-        self.image = toga.Image(save)
-        self.imageGraph = toga.ImageView(id='view1', image=self.image)
-        self.mainBox.add(self.imageGraph)
+        for i in range(len(AppLSLVisu.tabStreams)):
+            save = self.listTempFile[AppLSLVisu.nbGraphGenerated - 1] + ".png"
+            self.image = toga.Image(save)
+            self.imageGraph = toga.ImageView(id=f'view{i}', image=self.image)
+            self.listImgGraph[i] = self.imageGraph
+            self.mainBox.add(self.listImgGraph[i])
 
         # Remove the button
         if AppLSLVisu.nbGraphGenerated >= 1:
@@ -89,10 +92,12 @@ class AppLSLVisu(toga.App):
         self.createGraph()
 
         # Display the graph
-        save = self.listeTempFile[AppLSLVisu.nbGraphGenerated - 1] + ".png"
-        self.image = toga.Image(save)
-        self.imageGraph = toga.ImageView(id='view1', image=self.image)
-        self.mainBox.add(self.imageGraph)
+        for i in range(len(AppLSLVisu.tabStreams)):
+            save = self.listTempFile[AppLSLVisu.nbGraphGenerated - 1] + ".png"
+            self.image = toga.Image(save)
+            self.imageGraph = toga.ImageView(id=f'view{i+1}', image=self.image)
+            self.listImgGraph[i] = self.imageGraph
+            self.mainBox.add(self.listImgGraph[i])
 
         # Start the background task
         if AppLSLVisu.isGenerateGraph:
@@ -114,7 +119,10 @@ class AppLSLVisu(toga.App):
         self.buttonGetStream = toga.Button("Get LSL streams", on_press=self.getStream)
 
         # Create the list of temporary files
-        self.listeTempFile = []
+        self.listTempFile = []
+
+        # Create the list of images
+        self.listImgGraph = []
 
         # Add the button to the box corresponding
         self.boxButtonGetStream.add(self.buttonGetStream)
@@ -173,6 +181,7 @@ class AppLSLVisu(toga.App):
         AppLSLVisu.tabStreams = resolve_streams()
         AppLSLVisu.tabVal = [[0] * len(AppLSLVisu.tabStreams)]
         AppLSLVisu.tabTimestamp = [[0] * len(AppLSLVisu.tabStreams)]
+        self.listImgGraph = [0] * len(AppLSLVisu.tabStreams)
         self.boxButtonGraph.add(self.buttonGraph)
         self.boxButtonRecord.add(self.buttonRecordData)
 
