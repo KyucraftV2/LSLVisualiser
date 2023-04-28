@@ -35,7 +35,8 @@ class AppLSLVisu(toga.App):
 
             # Trying to remove the previous graph
             try:
-                self.mainBox.remove(self.imageGraph)
+                for graph in self.listImgGraph:
+                    self.mainBox.remove(graph)
             except:
                 pass
 
@@ -73,7 +74,9 @@ class AppLSLVisu(toga.App):
             self.image = toga.Image(save)
             self.imageGraph = toga.ImageView(id=f'view{i+1}', image=self.image)
             self.listImgGraph[i] = self.imageGraph
-            self.mainBox.add(self.listImgGraph[i])
+
+        for graph in self.listImgGraph:
+            self.mainBox.add(graph)
 
         # Remove the button
         if AppLSLVisu.nbGraphGenerated >= 1:
