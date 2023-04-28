@@ -39,9 +39,10 @@ class HelloWorld(toga.App):
         # Save the graph in a temporary file
         buf = io.BytesIO()
         plt.savefig(buf, format='png')
-        HelloWorld.tab_val = HelloWorld.tab_val[HelloWorld.nbValeurPlot-2:]
-        HelloWorld.tab_timestamp = HelloWorld.tab_timestamp[HelloWorld.nbValeurPlot-2:]
-        HelloWorld.nbValeurPlot = 0
+        if HelloWorld.nbGraphes %2==0:
+            HelloWorld.tab_val = HelloWorld.tab_val[HelloWorld.nbValeurPlot - 2:]
+            HelloWorld.tab_timestamp = HelloWorld.tab_timestamp[HelloWorld.nbValeurPlot - 2:]
+            HelloWorld.nbValeurPlot = 0
         fp = tempfile.NamedTemporaryFile()
         with open(f"{fp.name}.png", 'wb') as f:
             f.write(buf.getvalue())
