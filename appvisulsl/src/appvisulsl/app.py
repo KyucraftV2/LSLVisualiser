@@ -43,9 +43,9 @@ class AppLSLVisu(toga.App):
             # Save the graph in a temporary file
             buf = io.BytesIO()
             plt.savefig(buf, format='png')
-            if AppLSLVisu.nbGraphGenerated % 2 == 0:
-                AppLSLVisu.tabVal = AppLSLVisu.tabVal[AppLSLVisu.nbValPlot - 2:]
-                AppLSLVisu.tabTimestamp = AppLSLVisu.tabTimestamp[AppLSLVisu.nbValPlot - 2:]
+            if AppLSLVisu.nbGraphGenerated % 2 == 0 and len(AppLSLVisu.tabTimestamp) > 2:
+                AppLSLVisu.tabVal = AppLSLVisu.tabVal[i][AppLSLVisu.nbValPlot - 2:]
+                AppLSLVisu.tabTimestamp = AppLSLVisu.tabTimestamp[i][AppLSLVisu.nbValPlot - 2:]
                 AppLSLVisu.nbValPlot = 0
             fp = tempfile.NamedTemporaryFile()
             fp.name = fp.name + AppLSLVisu.tabStreams[i].name()
@@ -72,7 +72,7 @@ class AppLSLVisu(toga.App):
         for i in range(len(AppLSLVisu.tabStreams)):
             save = self.listTempFile[AppLSLVisu.nbGraphGenerated - 1] + ".png"
             self.image = toga.Image(save)
-            self.imageGraph = toga.ImageView(id=f'view{i+1}', image=self.image)
+            self.imageGraph = toga.ImageView(id=f'view{i + 1}', image=self.image)
             self.listImgGraph[i] = self.imageGraph
             print(i)
 
@@ -99,7 +99,7 @@ class AppLSLVisu(toga.App):
         for i in range(len(AppLSLVisu.tabStreams)):
             save = self.listTempFile[AppLSLVisu.nbGraphGenerated - 1] + ".png"
             self.image = toga.Image(save)
-            self.imageGraph = toga.ImageView(id=f'view{i+1}', image=self.image)
+            self.imageGraph = toga.ImageView(id=f'view{i + 1}', image=self.image)
             self.listImgGraph[i] = self.imageGraph
 
         for graph in self.listImgGraph:
@@ -167,8 +167,9 @@ class AppLSLVisu(toga.App):
         except:
             pass
         for i in range(len(AppLSLVisu.tabStreams)):
-            inlet = stream_inlet(AppLSLVisu.tabStreams[i][0])
+            inlet = stream_inlet(AppLSLVisu.tabStreams[i])
             samples, timestamp = inlet.pull_sample()
+            print(AppLSLVisu.tabTimestamp)
             AppLSLVisu.tabTimestamp[i].append(timestamp)
             AppLSLVisu.tabVal[i].append(samples[0])
         AppLSLVisu.nbValPlot += 1
@@ -185,8 +186,10 @@ class AppLSLVisu(toga.App):
 
     def getStream(self, widget):
         AppLSLVisu.tabStreams = resolve_streams()
-        AppLSLVisu.tabVal = [[0] * len(AppLSLVisu.tabStreams)]
-        AppLSLVisu.tabTimestamp = [[0] * len(AppLSLVisu.tabStreams)]
+        AppLSLVisu.tabVal = [[0]] * len(AppLSLVisu.tabStreams)
+        AppLSLVisu.tabTimestamp = [[0]] * len(AppLSLVisu.tabStreams)
+        print(AppLSLVisu.tabTimestamp)
+        print(AppLSLVisu.tabVal)
         self.listImgGraph = [0] * len(AppLSLVisu.tabStreams)
         self.boxButtonGraph.add(self.buttonGraph)
         self.boxButtonRecord.add(self.buttonRecordData)
