@@ -34,11 +34,11 @@ class AppLSLVisu(toga.App):
             plt.title("Graph of the stream " + AppLSLVisu.tabStreams[i].name())
 
             # Trying to remove the previous graph
-            try:
-                for graph in self.listImgGraph:
-                    self.mainBox.remove(graph)
-            except:
-                pass
+            # try:
+            #     for graph in self.listImgGraph:
+            #         self.split.content(graph)
+            # except:
+            #     pass
 
             # Save the graph in a temporary file
             buf = io.BytesIO()
@@ -75,8 +75,10 @@ class AppLSLVisu(toga.App):
             self.imageGraph = toga.ImageView(id=f'view{i + 1}', image=self.image)
             self.listImgGraph[i] = self.imageGraph
 
-        for graph in self.listImgGraph:
-            self.mainBox.add(graph)
+        # for graph in self.listImgGraph:
+        #     self.mainBox.add(graph)
+
+        self.split.content = self.listImgGraph
 
         # Remove the button
         if AppLSLVisu.nbGraphGenerated >= 1:
@@ -101,8 +103,10 @@ class AppLSLVisu(toga.App):
             self.imageGraph = toga.ImageView(id=f'view{i + 1}', image=self.image)
             self.listImgGraph[i] = self.imageGraph
 
-        for graph in self.listImgGraph:
-            self.mainBox.add(graph)
+        # for graph in self.listImgGraph:
+        #     self.split.add(graph)
+
+        self.split.content = self.listImgGraph
 
         # Start the background task
         if AppLSLVisu.isGenerateGraph:
@@ -129,6 +133,9 @@ class AppLSLVisu(toga.App):
         # Create the list of images
         self.listImgGraph = []
 
+        #create split
+        self.split = toga.SplitContainer()
+
         # Add the button to the box corresponding
         self.boxButtonGetStream.add(self.buttonGetStream)
 
@@ -136,6 +143,9 @@ class AppLSLVisu(toga.App):
         self.mainBox.add(self.boxButtonGetStream)
         self.mainBox.add(self.boxButtonGraph)
         self.mainBox.add(self.boxButtonRecord)
+        self.mainBox.add(self.split)
+        print(self.mainBox.children)
+
 
         # Create the main window
         self.main_window = toga.MainWindow(title=self.formal_name)
