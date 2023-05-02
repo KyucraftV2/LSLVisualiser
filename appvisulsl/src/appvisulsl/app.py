@@ -279,6 +279,9 @@ class AppLSLVisu(toga.App):
         self.boxButtonPreference.add(self.back)
 
     def chooseStream(self, widget):
+        """
+        Method who makes all change when a stream is choose
+        """
         listNameOfStream = [stream.name() for stream in AppLSLVisu.tabStreams]
         listPrint = ""
         for name in listNameOfStream:
