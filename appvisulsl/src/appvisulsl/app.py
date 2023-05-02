@@ -199,11 +199,17 @@ class AppLSLVisu(toga.App):
         self.main_window.show()
 
     def startRecord(self, widget):
+        """
+        Add task in background with add and remove button
+        """
         self.buttonStopRecord = toga.Button('Stop record', on_press=self.stopRecord)
         self.boxButtonRecord.add(self.buttonStopRecord)
         self.add_background_task(self.recordData)
 
     def stopRecord(self, widget):
+        """
+        Stop the record with remove and add button
+        """
         AppLSLVisu.isRecord = False
         self.boxButtonRecord.remove(self.buttonStopRecord)
         self.boxButtonRecord.add(self.buttonRecordData)
