@@ -34,11 +34,10 @@ class AppLSLVisu(toga.App):
             plt.title("Graph of the stream " + AppLSLVisu.tabStreams[i].name())
 
             # Trying to remove the previous graph
-            # try:
-            #     for graph in self.listImgGraph:
-            #         self.split.content(graph)
-            # except:
-            #     pass
+            try:
+                self.split.clear()
+            except:
+                pass
 
             # Save the graph in a temporary file
             buf = io.BytesIO()
@@ -125,7 +124,7 @@ class AppLSLVisu(toga.App):
         # Create the button
         self.buttonGraph = toga.Button("Start visualisation", on_press=self.displayGraph)
         self.buttonRecordData = toga.Button("Starting recording LSL", on_press=self.startRecord)
-        self.buttonGetStream = toga.Button("Get LSL streams", on_press=self.getStream)
+        self.buttonGetStream = toga.Button("Get all LSL streams", on_press=self.getStream)
 
         # Create the list of temporary files
         self.listTempFile = []
@@ -134,7 +133,7 @@ class AppLSLVisu(toga.App):
         self.listImgGraph = []
 
         #create split
-        self.split = toga.SplitContainer()
+        self.split = toga.SplitContainer(direction=toga.SplitContainer.HORIZONTAL)
 
         # Add the button to the box corresponding
         self.boxButtonGetStream.add(self.buttonGetStream)
@@ -144,12 +143,10 @@ class AppLSLVisu(toga.App):
         self.mainBox.add(self.boxButtonGraph)
         self.mainBox.add(self.boxButtonRecord)
         self.mainBox.add(self.split)
-        print(self.mainBox.children)
 
 
         # Create the main window
         self.main_window = toga.MainWindow(title=self.formal_name)
-        self.main_window.content = self.mainBox
         self.main_window.show()
 
     def startRecord(self, widget):
