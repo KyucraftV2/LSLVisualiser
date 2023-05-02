@@ -267,6 +267,9 @@ class AppLSLVisu(toga.App):
             self.mainBox.add(box)
 
     def preference(self, widget):
+        """
+        For setting just one stream who is generated
+        """
         self.boxButtonPreference.remove(self.buttonPreference)
         self.textInput = toga.TextInput(id="textInput", placeholder="Enter the name of the stream")
         self.button = toga.Button("Confirm", on_press=self.chooseStream)
