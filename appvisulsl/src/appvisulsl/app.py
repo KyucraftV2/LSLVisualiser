@@ -35,7 +35,7 @@ class AppLSLVisu(toga.App):
 
             # Trying to remove the previous graph
             try:
-                self.split.clear()
+                self.split.content = None
             except:
                 pass
 
@@ -78,7 +78,6 @@ class AppLSLVisu(toga.App):
         #     self.mainBox.add(graph)
 
         self.split.content = self.listImgGraph
-
         # Remove the button
         if AppLSLVisu.nbGraphGenerated >= 1:
             self.boxButtonGraph.remove(self.buttonGraph)
@@ -99,12 +98,11 @@ class AppLSLVisu(toga.App):
         for i in range(len(AppLSLVisu.tabStreams)):
             save = self.listTempFile[AppLSLVisu.nbGraphGenerated - 1] + ".png"
             self.image = toga.Image(save)
-            self.imageGraph = toga.ImageView(id=f'view{i + 1}', image=self.image)
+            self.imageGraph = toga.ImageView(image=self.image)
             self.listImgGraph[i] = self.imageGraph
 
         # for graph in self.listImgGraph:
         #     self.split.add(graph)
-
         self.split.content = self.listImgGraph
 
         # Start the background task
@@ -137,6 +135,17 @@ class AppLSLVisu(toga.App):
 
         # Add the button to the box corresponding
         self.boxButtonGetStream.add(self.buttonGetStream)
+
+        #testing
+        # img = toga.Image('resources/appvisulsl.png')
+        # self.image = toga.ImageView(id='view1', image=img)
+        # img2 = toga.Image('resources/img.png')
+        # self.image2 = toga.ImageView(id='view2', image=img2)
+        # self.boxx = toga.Box(style=Pack(direction=COLUMN))
+        # self.test = toga.ScrollContainer()
+        # self.test.content = self.boxx
+        #
+        # self.mainBox.add(self.test)
 
         # Add the boxes to the main box
         self.mainBox.add(self.boxButtonGetStream)
