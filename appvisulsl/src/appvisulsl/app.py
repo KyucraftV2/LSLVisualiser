@@ -121,11 +121,13 @@ class AppLSLVisu(toga.App):
         self.boxButtonGraph = toga.Box(style=Pack(direction=COLUMN))
         self.boxButtonRecord = toga.Box(style=Pack(direction=COLUMN))
         self.boxButtonGetStream = toga.Box(style=Pack(direction=COLUMN))
+        self.boxButtonPreference = toga.Box(style=Pack(direction=COLUMN))
 
         # Create the button
         self.buttonGraph = toga.Button("Start visualisation", on_press=self.displayGraph)
         self.buttonRecordData = toga.Button("Starting recording LSL", on_press=self.startRecord)
         self.buttonGetStream = toga.Button("Get all LSL streams", on_press=self.getStream)
+        self.buttonPreference = toga.Button("Preference", on_press=self.preference)
 
         # Create the list of temporary files
         self.listTempFile = []
@@ -141,6 +143,7 @@ class AppLSLVisu(toga.App):
 
         # Add the boxes to the main box
         self.mainBox.add(self.boxButtonGetStream)
+        self.mainBox.add(self.boxButtonPreference)
         self.mainBox.add(self.boxButtonGraph)
         self.mainBox.add(self.boxButtonRecord)
 
@@ -196,11 +199,15 @@ class AppLSLVisu(toga.App):
         self.listImgGraph = [0] * len(AppLSLVisu.tabStreams)
         self.boxButtonGraph.add(self.buttonGraph)
         self.boxButtonRecord.add(self.buttonRecordData)
+        self.boxButtonPreference.add(self.buttonPreference)
         for i in range(len(AppLSLVisu.tabStreams)):
             box = toga.Box(style=Pack(direction=COLUMN),id=f"box{i}")
             self.listBoxGraph.append(box)
             self.mainBox.add(box)
 
+    def preference(self, widget):
+        a = self.main_window.confirm_dialog(title="Preference", message="Not implemented yet")
+        print(a)
 
 
 def main():
