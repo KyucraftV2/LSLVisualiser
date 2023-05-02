@@ -27,33 +27,36 @@ class AppLSLVisu(toga.App):
         """
         Generate data
         """
-        for i in range(len(AppLSLVisu.tabStreams)):
-            # Create the figure and the plot
-            plt.figure()
-            plt.plot(AppLSLVisu.tabTimestamp[i], AppLSLVisu.tabVal[i])
-            plt.xlabel("timestamp")
-            plt.ylabel("value")
-            plt.title("Graph of the stream " + AppLSLVisu.tabStreams[i].name())
+        if AppLSLVisu.streamChoose:
+            pass
+        else:
+            for i in range(len(AppLSLVisu.tabStreams)):
+                # Create the figure and the plot
+                plt.figure()
+                plt.plot(AppLSLVisu.tabTimestamp[i], AppLSLVisu.tabVal[i])
+                plt.xlabel("timestamp")
+                plt.ylabel("value")
+                plt.title("Graph of the stream " + AppLSLVisu.tabStreams[i].name())
 
-            # Trying to remove the previous graph
-            try:
-                self.listBoxGraph[i].clear()
-            except:
-                pass
+                # Trying to remove the previous graph
+                try:
+                    self.listBoxGraph[i].clear()
+                except:
+                    pass
 
-            # Save the graph in a temporary file
-            buf = io.BytesIO()
-            plt.savefig(buf, format='png')
-            if AppLSLVisu.nbGraphGenerated % 2 == 0 and len(AppLSLVisu.tabTimestamp[1]) > 2:
-                AppLSLVisu.tabVal[i] = AppLSLVisu.tabVal[i][AppLSLVisu.nbValPlot - 2:]
-                AppLSLVisu.tabTimestamp[i] = AppLSLVisu.tabTimestamp[i][AppLSLVisu.nbValPlot - 2:]
-                AppLSLVisu.nbValPlot = 0
-            fp = tempfile.NamedTemporaryFile()
-            fp.name = fp.name + AppLSLVisu.tabStreams[i].name()
-            with open(f"{fp.name}.png", 'wb') as f:
-                f.write(buf.getvalue())
-            self.listTempFile.append(fp.name)
-            plt.close()
+                # Save the graph in a temporary file
+                buf = io.BytesIO()
+                plt.savefig(buf, format='png')
+                if AppLSLVisu.nbGraphGenerated % 2 == 0 and len(AppLSLVisu.tabTimestamp[1]) > 2:
+                    AppLSLVisu.tabVal[i] = AppLSLVisu.tabVal[i][AppLSLVisu.nbValPlot - 2:]
+                    AppLSLVisu.tabTimestamp[i] = AppLSLVisu.tabTimestamp[i][AppLSLVisu.nbValPlot - 2:]
+                    AppLSLVisu.nbValPlot = 0
+                fp = tempfile.NamedTemporaryFile()
+                fp.name = fp.name + AppLSLVisu.tabStreams[i].name()
+                with open(f"{fp.name}.png", 'wb') as f:
+                    f.write(buf.getvalue())
+                self.listTempFile.append(fp.name)
+                plt.close()
 
         AppLSLVisu.nbGraphGenerated += 1
 
@@ -68,17 +71,18 @@ class AppLSLVisu(toga.App):
         self.boutonStopChart = toga.Button("Stop generating graph", on_press=self.stopGenerateGraph)
         self.boxButtonGraph.add(self.boutonStopChart)
 
-        # Display the graph
-        for i in range(len(AppLSLVisu.tabStreams)):
-            save = self.listTempFile[AppLSLVisu.nbGraphGenerated - 1 + i] + ".png"
-            self.image = toga.Image(save)
-            self.imageGraph = toga.ImageView(image=self.image, id=f"view{AppLSLVisu.countId}")
-            self.listImgGraph[i] = self.imageGraph
-            self.imageGraph.style.update(width=300, height=300)
-            self.listBoxGraph[i].add(self.imageGraph)
-            AppLSLVisu.countId += 1
-
-        print(self.mainBox.children)
+        if AppLSLVisu.streamChoose:
+            pass
+        else:
+            # Display the graph
+            for i in range(len(AppLSLVisu.tabStreams)):
+                save = self.listTempFile[AppLSLVisu.nbGraphGenerated - 1 + i] + ".png"
+                self.image = toga.Image(save)
+                self.imageGraph = toga.ImageView(image=self.image, id=f"view{AppLSLVisu.countId}")
+                self.listImgGraph[i] = self.imageGraph
+                self.imageGraph.style.update(width=300, height=300)
+                self.listBoxGraph[i].add(self.imageGraph)
+                AppLSLVisu.countId += 1
 
         # Remove the button
         if AppLSLVisu.nbGraphGenerated >= 1:
@@ -97,15 +101,18 @@ class AppLSLVisu(toga.App):
         # Create the graph
         self.createGraph()
 
-        # Display the graph
-        for i in range(len(AppLSLVisu.tabStreams)):
-            save = self.listTempFile[AppLSLVisu.nbGraphGenerated - 1 + i] + ".png"
-            self.image = toga.Image(save)
-            self.imageGraph = toga.ImageView(image=self.image, id=f"view{AppLSLVisu.countId}")
-            self.imageGraph.style.update(width=300, height=300)
-            self.listImgGraph[i] = self.imageGraph
-            self.listBoxGraph[i].add(self.imageGraph)
-            AppLSLVisu.countId += 1
+        if AppLSLVisu.streamChoose:
+            pass
+        else:
+            # Display the graph
+            for i in range(len(AppLSLVisu.tabStreams)):
+                save = self.listTempFile[AppLSLVisu.nbGraphGenerated - 1 + i] + ".png"
+                self.image = toga.Image(save)
+                self.imageGraph = toga.ImageView(image=self.image, id=f"view{AppLSLVisu.countId}")
+                self.imageGraph.style.update(width=300, height=300)
+                self.listImgGraph[i] = self.imageGraph
+                self.listBoxGraph[i].add(self.imageGraph)
+                AppLSLVisu.countId += 1
 
         # Start the background task
         if AppLSLVisu.isGenerateGraph:
@@ -217,7 +224,7 @@ class AppLSLVisu(toga.App):
         listNameOfStream = [stream.name() for stream in AppLSLVisu.tabStreams]
         listPrint = ""
         for name in listNameOfStream:
-            listPrint+="- "+name+"\n"
+            listPrint += "- " + name + "\n"
         if self.textInput.value in listNameOfStream:
             self.main_window.info_dialog("Success", "The stream has been found")
             self.boxButtonPreference.remove(self.textInput)
@@ -226,8 +233,12 @@ class AppLSLVisu(toga.App):
             self.boxButtonPreference.add(self.buttonPreference)
             AppLSLVisu.streamChoose = True
             self.nameStream = self.textInput.value
+            self.listBoxGraph = []
+            self.boxGraph = toga.Box()
+            self.mainBox.add(self.boxGraph)
         else:
-            self.main_window.info_dialog("Error", f"The stream has not been found, please try again\nList stream :\n{listPrint}")
+            self.main_window.info_dialog("Error",
+                                         f"The stream has not been found, please try again\nList stream :\n{listPrint}")
 
     def backPreference(self, widget):
         self.boxButtonPreference.remove(self.textInput)
