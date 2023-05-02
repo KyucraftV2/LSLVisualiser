@@ -7,7 +7,7 @@ import tempfile
 
 import matplotlib.pyplot as plt
 import toga
-#from pylsl import *
+from pylsl import *
 from toga.style import Pack
 from toga.style.pack import COLUMN
 
@@ -26,94 +26,91 @@ class AppLSLVisu(toga.App):
         """
         Generate data
         """
-        pass
-        # for i in range(len(AppLSLVisu.tabStreams)):
-        #     # Create the figure and the plot
-        #     plt.figure()
-        #     plt.plot(AppLSLVisu.tabTimestamp[i], AppLSLVisu.tabVal[i])
-        #     plt.xlabel("timestamp")
-        #     plt.ylabel("value")
-        #     plt.title("Graph of the stream " + AppLSLVisu.tabStreams[i].name())
-        #
-        #     # Trying to remove the previous graph
-        #     try:
-        #         self.listBoxGraph[i].clear()
-        #     except:
-        #         pass
-        #
-        #     # Save the graph in a temporary file
-        #     buf = io.BytesIO()
-        #     plt.savefig(buf, format='png')
-        #     if AppLSLVisu.nbGraphGenerated % 2 == 0 and len(AppLSLVisu.tabTimestamp[1]) > 2:
-        #         AppLSLVisu.tabVal[i] = AppLSLVisu.tabVal[i][AppLSLVisu.nbValPlot - 2:]
-        #         AppLSLVisu.tabTimestamp[i] = AppLSLVisu.tabTimestamp[i][AppLSLVisu.nbValPlot - 2:]
-        #         AppLSLVisu.nbValPlot = 0
-        #     fp = tempfile.NamedTemporaryFile()
-        #     fp.name = fp.name + AppLSLVisu.tabStreams[i].name()
-        #     with open(f"{fp.name}.png", 'wb') as f:
-        #         f.write(buf.getvalue())
-        #     self.listTempFile.append(fp.name)
-        #     plt.close()
-        #
-        # AppLSLVisu.nbGraphGenerated += 1
+        for i in range(len(AppLSLVisu.tabStreams)):
+            # Create the figure and the plot
+            plt.figure()
+            plt.plot(AppLSLVisu.tabTimestamp[i], AppLSLVisu.tabVal[i])
+            plt.xlabel("timestamp")
+            plt.ylabel("value")
+            plt.title("Graph of the stream " + AppLSLVisu.tabStreams[i].name())
+
+            # Trying to remove the previous graph
+            try:
+                self.listBoxGraph[i].clear()
+            except:
+                pass
+
+            # Save the graph in a temporary file
+            buf = io.BytesIO()
+            plt.savefig(buf, format='png')
+            if AppLSLVisu.nbGraphGenerated % 2 == 0 and len(AppLSLVisu.tabTimestamp[1]) > 2:
+                AppLSLVisu.tabVal[i] = AppLSLVisu.tabVal[i][AppLSLVisu.nbValPlot - 2:]
+                AppLSLVisu.tabTimestamp[i] = AppLSLVisu.tabTimestamp[i][AppLSLVisu.nbValPlot - 2:]
+                AppLSLVisu.nbValPlot = 0
+            fp = tempfile.NamedTemporaryFile()
+            fp.name = fp.name + AppLSLVisu.tabStreams[i].name()
+            with open(f"{fp.name}.png", 'wb') as f:
+                f.write(buf.getvalue())
+            self.listTempFile.append(fp.name)
+            plt.close()
+
+        AppLSLVisu.nbGraphGenerated += 1
 
     def displayGraph(self, widget):
         """
         Display the graph
         """
-        pass
-        # # Create the graph
-        # self.createGraph()
-        #
-        # # Create button
-        # self.boutonStopChart = toga.Button("Stop generating graph", on_press=self.stopGenerateGraph)
-        # self.boxButtonGraph.add(self.boutonStopChart)
-        #
-        # # Display the graph
-        # for i in range(len(AppLSLVisu.tabStreams)):
-        #     save = self.listTempFile[AppLSLVisu.nbGraphGenerated - 1 + i] + ".png"
-        #     self.image = toga.Image(save)
-        #     self.imageGraph = toga.ImageView(image=self.image, id=f"view{AppLSLVisu.countId}")
-        #     self.listImgGraph[i] = self.imageGraph
-        #     self.imageGraph.style.update(width=300, height=300)
-        #     self.listBoxGraph[i].add(self.imageGraph)
-        #     AppLSLVisu.countId += 1
-        #
-        # print(self.mainBox.children)
-        #
-        # # Remove the button
-        # if AppLSLVisu.nbGraphGenerated >= 1:
-        #     self.boxButtonGraph.remove(self.buttonGraph)
-        #
-        # # Start the background task
-        # self.add_background_task(self.regenGraph)
-        # AppLSLVisu.isGenerateGraph = True
+        # Create the graph
+        self.createGraph()
+
+        # Create button
+        self.boutonStopChart = toga.Button("Stop generating graph", on_press=self.stopGenerateGraph)
+        self.boxButtonGraph.add(self.boutonStopChart)
+
+        # Display the graph
+        for i in range(len(AppLSLVisu.tabStreams)):
+            save = self.listTempFile[AppLSLVisu.nbGraphGenerated - 1 + i] + ".png"
+            self.image = toga.Image(save)
+            self.imageGraph = toga.ImageView(image=self.image, id=f"view{AppLSLVisu.countId}")
+            self.listImgGraph[i] = self.imageGraph
+            self.imageGraph.style.update(width=300, height=300)
+            self.listBoxGraph[i].add(self.imageGraph)
+            AppLSLVisu.countId += 1
+
+        print(self.mainBox.children)
+
+        # Remove the button
+        if AppLSLVisu.nbGraphGenerated >= 1:
+            self.boxButtonGraph.remove(self.buttonGraph)
+
+        # Start the background task
+        self.add_background_task(self.regenGraph)
+        AppLSLVisu.isGenerateGraph = True
 
     async def regenGraph(self, widget):
         """
         Regenerate the graph every 3 seconds
         """
         await asyncio.sleep(3)
-        pass
-        # # Create the graph
-        # self.createGraph()
-        #
-        # # Display the graph
-        # for i in range(len(AppLSLVisu.tabStreams)):
-        #     save = self.listTempFile[AppLSLVisu.nbGraphGenerated - 1 + i] + ".png"
-        #     self.image = toga.Image(save)
-        #     self.imageGraph = toga.ImageView(image=self.image, id=f"view{AppLSLVisu.countId}")
-        #     self.imageGraph.style.update(width=300, height=300)
-        #     self.listImgGraph[i] = self.imageGraph
-        #     self.listBoxGraph[i].add(self.imageGraph)
-        #     AppLSLVisu.countId += 1
-        #
-        # # for graph in self.listImgGraph:
-        # #     self.split.add(graph)
-        #
-        # # Start the background task
-        # if AppLSLVisu.isGenerateGraph:
-        #     self.add_background_task(self.regenGraph)
+        # Create the graph
+        self.createGraph()
+
+        # Display the graph
+        for i in range(len(AppLSLVisu.tabStreams)):
+            save = self.listTempFile[AppLSLVisu.nbGraphGenerated - 1 + i] + ".png"
+            self.image = toga.Image(save)
+            self.imageGraph = toga.ImageView(image=self.image, id=f"view{AppLSLVisu.countId}")
+            self.imageGraph.style.update(width=300, height=300)
+            self.listImgGraph[i] = self.imageGraph
+            self.listBoxGraph[i].add(self.imageGraph)
+            AppLSLVisu.countId += 1
+
+        # for graph in self.listImgGraph:
+        #     self.split.add(graph)
+
+        # Start the background task
+        if AppLSLVisu.isGenerateGraph:
+            self.add_background_task(self.regenGraph)
 
     def startup(self):
         """
@@ -174,32 +171,31 @@ class AppLSLVisu(toga.App):
 
     async def recordData(self, widget):
         await asyncio.sleep(0.001)
-        pass
-        # try:
-        #     self.boxButtonRecord.remove(self.buttonRecordData)
-        # except:
-        #     pass
-        # for i in range(len(AppLSLVisu.tabStreams)):
-        #     inlet = stream_inlet(AppLSLVisu.tabStreams[i])
-        #     samples, timestamp = inlet.pull_sample()
-        #     AppLSLVisu.tabTimestamp[i].append(timestamp)
-        #     AppLSLVisu.tabVal[i].append(samples[0])
-        # AppLSLVisu.nbValPlot += 1
-        # if AppLSLVisu.isRecord:
-        #     self.add_background_task(self.recordData)
-        # else:
-        #     try:
-        #         self.boxButtonRecord.remove(self.buttonStopRecord)
-        #     except:
-        #         pass
-        #         pass
-        #     self.boxButtonRecord.add(self.buttonRecordData)
-        #     AppLSLVisu.isRecord = True
+        try:
+            self.boxButtonRecord.remove(self.buttonRecordData)
+        except:
+            pass
+        for i in range(len(AppLSLVisu.tabStreams)):
+            inlet = stream_inlet(AppLSLVisu.tabStreams[i])
+            samples, timestamp = inlet.pull_sample()
+            AppLSLVisu.tabTimestamp[i].append(timestamp)
+            AppLSLVisu.tabVal[i].append(samples[0])
+        AppLSLVisu.nbValPlot += 1
+        if AppLSLVisu.isRecord:
+            self.add_background_task(self.recordData)
+        else:
+            try:
+                self.boxButtonRecord.remove(self.buttonStopRecord)
+            except:
+                pass
+                pass
+            self.boxButtonRecord.add(self.buttonRecordData)
+            AppLSLVisu.isRecord = True
 
     def getStream(self, widget):
-        # AppLSLVisu.tabStreams = resolve_streams()
-        # AppLSLVisu.tabVal = [[0]] * len(AppLSLVisu.tabStreams)
-        # AppLSLVisu.tabTimestamp = [[0]] * len(AppLSLVisu.tabStreams)
+        AppLSLVisu.tabStreams = resolve_streams()
+        AppLSLVisu.tabVal = [[0]] * len(AppLSLVisu.tabStreams)
+        AppLSLVisu.tabTimestamp = [[0]] * len(AppLSLVisu.tabStreams)
         self.listImgGraph = [0] * len(AppLSLVisu.tabStreams)
         self.boxButtonGraph.add(self.buttonGraph)
         self.boxButtonRecord.add(self.buttonRecordData)
