@@ -225,6 +225,9 @@ class AppLSLVisu(toga.App):
         self.boxButtonGraph.refresh()
 
     async def recordData(self, widget):
+        """
+        Record data with streams LSL
+        """
         await asyncio.sleep(0.001)
         try:
             self.boxButtonRecord.remove(self.buttonRecordData)
@@ -248,6 +251,9 @@ class AppLSLVisu(toga.App):
             AppLSLVisu.isRecord = True
 
     def getStream(self, widget):
+        """
+
+        """
         AppLSLVisu.tabStreams = resolve_streams()
         AppLSLVisu.tabVal = [[0]] * len(AppLSLVisu.tabStreams)
         AppLSLVisu.tabTimestamp = [[0]] * len(AppLSLVisu.tabStreams)
@@ -255,7 +261,6 @@ class AppLSLVisu(toga.App):
         self.boxButtonGraph.add(self.buttonGraph)
         self.boxButtonRecord.add(self.buttonRecordData)
         self.boxButtonPreference.add(self.buttonPreference)
-        bigbox = toga.Box(style=Pack(direction=COLUMN))
         for i in range(len(AppLSLVisu.tabStreams)):
             box = toga.Box(style=Pack(direction=COLUMN), id=f"box{i}")
             self.listBoxGraph.append(box)
