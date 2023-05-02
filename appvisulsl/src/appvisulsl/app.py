@@ -52,7 +52,6 @@ class AppLSLVisu(toga.App):
             with open(f"{fp.name}.png", 'wb') as f:
                 f.write(buf.getvalue())
             self.listTempFile.append(fp.name)
-
             plt.close()
 
         AppLSLVisu.nbGraphGenerated += 1
@@ -70,7 +69,7 @@ class AppLSLVisu(toga.App):
 
         # Display the graph
         for i in range(len(AppLSLVisu.tabStreams)):
-            save = self.listTempFile[AppLSLVisu.nbGraphGenerated - 1] + ".png"
+            save = self.listTempFile[AppLSLVisu.nbGraphGenerated - 1 + i] + ".png"
             self.image = toga.Image(save)
             self.imageGraph = toga.ImageView(image=self.image,id=f"view{AppLSLVisu.countId}")
             self.listImgGraph[i] = self.imageGraph
@@ -99,7 +98,7 @@ class AppLSLVisu(toga.App):
 
         # Display the graph
         for i in range(len(AppLSLVisu.tabStreams)):
-            save = self.listTempFile[AppLSLVisu.nbGraphGenerated - 1] + ".png"
+            save = self.listTempFile[AppLSLVisu.nbGraphGenerated - 1 + i] + ".png"
             self.image = toga.Image(save)
             self.imageGraph = toga.ImageView(image=self.image, id=f"view{AppLSLVisu.countId}")
             self.listImgGraph[i] = self.imageGraph
