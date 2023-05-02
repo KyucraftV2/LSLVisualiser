@@ -21,6 +21,7 @@ class AppLSLVisu(toga.App):
     nbValPlot = 0
     tabStreams = []
     countId = 0
+    streamChoose = False
 
     def createGraph(self):
         """
@@ -92,6 +93,7 @@ class AppLSLVisu(toga.App):
         Regenerate the graph every 3 seconds
         """
         await asyncio.sleep(3)
+
         # Create the graph
         self.createGraph()
 
@@ -104,9 +106,6 @@ class AppLSLVisu(toga.App):
             self.listImgGraph[i] = self.imageGraph
             self.listBoxGraph[i].add(self.imageGraph)
             AppLSLVisu.countId += 1
-
-        # for graph in self.listImgGraph:
-        #     self.split.add(graph)
 
         # Start the background task
         if AppLSLVisu.isGenerateGraph:
@@ -201,7 +200,7 @@ class AppLSLVisu(toga.App):
         self.boxButtonRecord.add(self.buttonRecordData)
         self.boxButtonPreference.add(self.buttonPreference)
         for i in range(len(AppLSLVisu.tabStreams)):
-            box = toga.Box(style=Pack(direction=COLUMN),id=f"box{i}")
+            box = toga.Box(style=Pack(direction=COLUMN), id=f"box{i}")
             self.listBoxGraph.append(box)
             self.mainBox.add(box)
 
@@ -214,18 +213,23 @@ class AppLSLVisu(toga.App):
         self.boxButtonPreference.add(self.button)
         self.boxButtonPreference.add(self.back)
 
-    def chooseStream(self,widget):
-        listeNameOfStream = [stream.name() for stream in AppLSLVisu.tabStreams]
-        print(listeNameOfStream)
-        if self.textInput.value in listeNameOfStream:
+    def chooseStream(self, widget):
+        listNameOfStream = [stream.name() for stream in AppLSLVisu.tabStreams]
+        listPrint = ""
+        for name in listNameOfStream:
+            listPrint+="- "+name+"\n"
+        if self.textInput.value in listNameOfStream:
             self.main_window.info_dialog("Success", "The stream has been found")
             self.boxButtonPreference.remove(self.textInput)
             self.boxButtonPreference.remove(widget)
+            self.boxButtonPreference.remove(self.back)
             self.boxButtonPreference.add(self.buttonPreference)
+            AppLSLVisu.streamChoose = True
+            self.nameStream = self.textInput.value
         else:
-            self.main_window.info_dialog("Error", "The stream has not been found, please try again")
+            self.main_window.info_dialog("Error", f"The stream has not been found, please try again\nList stream :\n{listPrint}")
 
-    def backPreference(self,widget):
+    def backPreference(self, widget):
         self.boxButtonPreference.remove(self.textInput)
         self.boxButtonPreference.remove(self.button)
         self.boxButtonPreference.remove(self.back)
