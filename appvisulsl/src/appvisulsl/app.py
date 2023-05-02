@@ -206,8 +206,23 @@ class AppLSLVisu(toga.App):
             self.mainBox.add(box)
 
     def preference(self, widget):
-        a = self.main_window.confirm_dialog(title="Preference", message="Not implemented yet")
-        print(a)
+        self.boxButtonPreference.remove(self.buttonPreference)
+        self.textInput = toga.TextInput(id="textInput", placeholder="Enter the name of the stream")
+        button = toga.Button("Confirm", on_press=self.chooseStream)
+        self.boxButtonPreference.add(self.textInput)
+        self.boxButtonPreference.add(button)
+
+    def chooseStream(self,widget):
+        listeNameOfStream = [stream.name() for stream in AppLSLVisu.tabStreams]
+        print(listeNameOfStream)
+        if self.textInput.value in listeNameOfStream:
+            self.main_window.info_dialog("Success", "The stream has been found")
+            self.boxButtonPreference.remove(self.textInput)
+            self.boxButtonPreference.remove(widget)
+            self.boxButtonPreference.add(self.buttonPreference)
+        else:
+            self.main_window.info_dialog("Error", "The stream has not been found, please try again")
+
 
 
 def main():
