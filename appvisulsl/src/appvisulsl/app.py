@@ -216,6 +216,9 @@ class AppLSLVisu(toga.App):
         self.boxButtonRecord.refresh()
 
     def stopGenerateGraph(self, widget):
+        """
+        Stop generate graph and remove/add button
+        """
         AppLSLVisu.isGenerateGraph = False
         self.boxButtonGraph.remove(self.boutonStopChart)
         self.boxButtonGraph.add(self.buttonGraph)
