@@ -20,6 +20,7 @@ class AppLSLVisu(toga.App):
     tabTimestamp = [0]
     nbValPlot = 0
     tabStreams = []
+    countId = 0
 
     def createGraph(self):
         """
@@ -71,13 +72,15 @@ class AppLSLVisu(toga.App):
         for i in range(len(AppLSLVisu.tabStreams)):
             save = self.listTempFile[AppLSLVisu.nbGraphGenerated - 1] + ".png"
             self.image = toga.Image(save)
-            self.imageGraph = toga.ImageView(id=f'view{i + 1}', image=self.image)
+            self.imageGraph = toga.ImageView(image=self.image,id=f"view{AppLSLVisu.countId}")
             self.listImgGraph[i] = self.imageGraph
+            AppLSLVisu.countId += 1
 
         # for graph in self.listImgGraph:
         #     self.mainBox.add(graph)
 
         self.split.content = self.listImgGraph
+
         # Remove the button
         if AppLSLVisu.nbGraphGenerated >= 1:
             self.boxButtonGraph.remove(self.buttonGraph)
@@ -98,8 +101,9 @@ class AppLSLVisu(toga.App):
         for i in range(len(AppLSLVisu.tabStreams)):
             save = self.listTempFile[AppLSLVisu.nbGraphGenerated - 1] + ".png"
             self.image = toga.Image(save)
-            self.imageGraph = toga.ImageView(image=self.image)
+            self.imageGraph = toga.ImageView(image=self.image, id=f"view{AppLSLVisu.countId}")
             self.listImgGraph[i] = self.imageGraph
+            AppLSLVisu.countId += 1
 
         # for graph in self.listImgGraph:
         #     self.split.add(graph)
@@ -131,7 +135,7 @@ class AppLSLVisu(toga.App):
         self.listImgGraph = []
 
         #create split
-        self.split = toga.SplitContainer(direction=toga.SplitContainer.HORIZONTAL)
+        self.split = toga.SplitContainer(direction=toga.SplitContainer.VERTICAL)
 
         # Add the button to the box corresponding
         self.boxButtonGetStream.add(self.buttonGetStream)
