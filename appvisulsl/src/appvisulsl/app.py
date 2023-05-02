@@ -208,9 +208,11 @@ class AppLSLVisu(toga.App):
     def preference(self, widget):
         self.boxButtonPreference.remove(self.buttonPreference)
         self.textInput = toga.TextInput(id="textInput", placeholder="Enter the name of the stream")
-        button = toga.Button("Confirm", on_press=self.chooseStream)
+        self.button = toga.Button("Confirm", on_press=self.chooseStream)
+        self.back = toga.Button("Back", on_press=self.backPreference)
         self.boxButtonPreference.add(self.textInput)
-        self.boxButtonPreference.add(button)
+        self.boxButtonPreference.add(self.button)
+        self.boxButtonPreference.add(self.back)
 
     def chooseStream(self,widget):
         listeNameOfStream = [stream.name() for stream in AppLSLVisu.tabStreams]
@@ -223,6 +225,11 @@ class AppLSLVisu(toga.App):
         else:
             self.main_window.info_dialog("Error", "The stream has not been found, please try again")
 
+    def backPreference(self,widget):
+        self.boxButtonPreference.remove(self.textInput)
+        self.boxButtonPreference.remove(self.button)
+        self.boxButtonPreference.remove(self.back)
+        self.boxButtonPreference.add(self.buttonPreference)
 
 
 def main():
