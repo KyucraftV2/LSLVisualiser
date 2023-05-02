@@ -179,6 +179,9 @@ class AppLSLVisu(toga.App):
         # Create the list of box for the graph images
         self.listBoxGraph = []
 
+        # Create a scroller for graph
+        self.scrolling = toga.ScrollContainer(style=Pack(direction=COLUMN))
+
         # Add the button to the box corresponding
         self.boxButtonGetStream.add(self.buttonGetStream)
 
@@ -187,6 +190,7 @@ class AppLSLVisu(toga.App):
         self.mainBox.add(self.boxButtonPreference)
         self.mainBox.add(self.boxButtonGraph)
         self.mainBox.add(self.boxButtonRecord)
+        self.mainBox.add(self.scrolling)
 
         # Create the main window
         self.main_window = toga.MainWindow(title=self.formal_name)
@@ -241,10 +245,12 @@ class AppLSLVisu(toga.App):
         self.boxButtonGraph.add(self.buttonGraph)
         self.boxButtonRecord.add(self.buttonRecordData)
         self.boxButtonPreference.add(self.buttonPreference)
+        bigbox = toga.Box(style=Pack(direction=COLUMN))
         for i in range(len(AppLSLVisu.tabStreams)):
             box = toga.Box(style=Pack(direction=COLUMN), id=f"box{i}")
             self.listBoxGraph.append(box)
-            self.mainBox.add(box)
+            bigbox.add(box)
+        self.scrolling.content = bigbox
 
     def preference(self, widget):
         self.boxButtonPreference.remove(self.buttonPreference)
