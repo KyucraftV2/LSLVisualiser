@@ -190,11 +190,12 @@ class AppLSLVisu(toga.App):
         self.mainBox.add(self.boxButtonPreference)
         self.mainBox.add(self.boxButtonGraph)
         self.mainBox.add(self.boxButtonRecord)
-        self.mainBox.add(self.scrolling)
+
+        self.scrolling.content = self.mainBox
 
         # Create the main window
         self.main_window = toga.MainWindow(title=self.formal_name)
-        self.main_window.content = self.mainBox
+        self.main_window.content = self.scrolling
         self.main_window.show()
 
     def startRecord(self, widget):
@@ -249,8 +250,7 @@ class AppLSLVisu(toga.App):
         for i in range(len(AppLSLVisu.tabStreams)):
             box = toga.Box(style=Pack(direction=COLUMN), id=f"box{i}")
             self.listBoxGraph.append(box)
-            bigbox.add(box)
-        self.scrolling.content = bigbox
+            self.mainBox.add(box)
 
     def preference(self, widget):
         self.boxButtonPreference.remove(self.buttonPreference)
