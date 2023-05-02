@@ -252,7 +252,7 @@ class AppLSLVisu(toga.App):
 
     def getStream(self, widget):
         """
-
+        Get all streams and add all button for start record, generate graph etc.
         """
         AppLSLVisu.tabStreams = resolve_streams()
         AppLSLVisu.tabVal = [[0]] * len(AppLSLVisu.tabStreams)
