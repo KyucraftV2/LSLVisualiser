@@ -147,6 +147,7 @@ class AppLSLVisu(toga.App):
 
         # Create the main window
         self.main_window = toga.MainWindow(title=self.formal_name)
+        self.main_window.content = self.mainBox
         self.main_window.show()
 
     def startRecord(self, widget):
