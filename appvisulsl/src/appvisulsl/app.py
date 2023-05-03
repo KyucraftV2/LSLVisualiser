@@ -176,35 +176,11 @@ class AppLSLVisu(toga.App):
         """
         await asyncio.sleep(0.001)
         pass
-        # try:
-        #     self.boxButtonRecord.remove(self.buttonRecordData)
-        # except:
-        #     pass
-        # for i in range(len(AppLSLVisu.tabStreams)):
-        #     inlet = stream_inlet(AppLSLVisu.tabStreams[i])
-        #     samples, timestamp = inlet.pull_sample()
-        #     AppLSLVisu.tabTimestamp[i].append(timestamp)
-        #     AppLSLVisu.tabVal[i].append(samples[0])
-        # AppLSLVisu.nbValPlot += 1
-        # if AppLSLVisu.isRecord:
-        #     self.add_background_task(self.recordData)
-        # else:
-        #     try:
-        #         self.boxButtonRecord.remove(self.buttonStopRecord)
-        #     except:
-        #         pass
-        #         pass
-        #     self.boxButtonRecord.add(self.buttonRecordData)
-        #     AppLSLVisu.isRecord = True
 
     def getStream(self, widget):
         """
         Get all streams and add all button for start record, generate graph etc.
         """
-        # AppLSLVisu.tabStreams = resolve_streams()
-        # AppLSLVisu.tabVal = [[0]] * len(AppLSLVisu.tabStreams)
-        # AppLSLVisu.tabTimestamp = [[0]] * len(AppLSLVisu.tabStreams)
-        # self.listImgGraph = [0] * len(AppLSLVisu.tabStreams)
         self.boxButtonGraph.add(self.buttonGraph)
         self.boxButtonRecord.add(self.buttonRecordData)
         self.boxButtonPreference.add(self.buttonPreference)
@@ -230,24 +206,6 @@ class AppLSLVisu(toga.App):
         Method who makes all change when a stream is choose
         """
         pass
-        # listNameOfStream = [stream.name() for stream in AppLSLVisu.tabStreams]
-        # listPrint = ""
-        # for name in listNameOfStream:
-        #     listPrint += "- " + name + "\n"
-        # if self.textInput.value in listNameOfStream:
-        #     self.main_window.info_dialog("Success", "The stream has been found")
-        #     self.boxButtonPreference.remove(self.textInput)
-        #     self.boxButtonPreference.remove(widget)
-        #     self.boxButtonPreference.remove(self.back)
-        #     self.boxButtonPreference.add(self.buttonPreference)
-        #     AppLSLVisu.streamChoose = True
-        #     self.nameStream = self.textInput.value
-        #     self.listBoxGraph = []
-        #     self.boxGraph = toga.Box()
-        #     self.mainBox.add(self.boxGraph)
-        # else:
-        #     self.main_window.info_dialog("Error",
-        #                                  f"The stream has not been found, please try again\nList stream :\n{listPrint}")
 
     def backPreference(self, widget):
         self.boxButtonPreference.remove(self.textInput)
@@ -263,9 +221,6 @@ def getStream(listStream: list, nameStream: str):
     :return : The place of the stream with the name in parameters
     """
     pass
-    # listName = [stream.name() for stream in listStream]
-    # return listName.index(nameStream)
-
 
 def main():
     return AppLSLVisu()
