@@ -189,15 +189,15 @@ class AppLSLVisu(toga.App):
         box3 = toga.Box()
 
         resources = os.path.join(AppLSLVisu.app.paths.app, "resources")
-        img1 = toga.ImageView(image=toga.Image(os.path.join(resources, "flux1.png")))
-        img2 = toga.ImageView(image=toga.Image(os.path.join(resources, "flux2.png")))
-        img3 = toga.ImageView(image=toga.Image(os.path.join(resources, "flux3.png")))
-        img1.style.update(width=400, height=400)
-        img2.style.update(width=400, height=400)
-        img3.style.update(width=400, height=400)
-        box1.add(img1)
-        box2.add(img2)
-        box3.add(img3)
+        self.img1 = toga.ImageView(image=toga.Image(os.path.join(resources, "flux1.png")))
+        self.img2 = toga.ImageView(image=toga.Image(os.path.join(resources, "flux2.png")))
+        self.img3 = toga.ImageView(image=toga.Image(os.path.join(resources, "flux3.png")))
+        self.img1.style.update(width=400, height=400)
+        self.img2.style.update(width=400, height=400)
+        self.img3.style.update(width=400, height=400)
+        box1.add(self.img1)
+        box2.add(self.img2)
+        box3.add(self.img3)
 
         bibox = toga.Box(style=Pack(direction=COLUMN))
         bibox.add(box1)
@@ -338,6 +338,12 @@ class AppLSLVisu(toga.App):
 
     def test(self,widget):
         print(self.main_window.size)
+        size = self.main_window.size
+        self.img1.style.update(width=size[0]*25/100,height=size[1]*25/100)
+        #self.img2.style.update(width=size[0] * 25 / 100, height=size[1] * 25 / 100)
+        #self.img3.style.update(width=size[0] * 25 / 100, height=size[1] * 25 / 100)
+        print("widht="+size[0]*30/100)
+        print("height="+size[1]*30/100)
 
 
 def getStream(listStream: list, nameStream: str):
