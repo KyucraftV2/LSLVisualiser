@@ -285,26 +285,29 @@ class AppLSLVisu(toga.App):
 
     def chooseStream(self, widget):
         """
-        Method who makes all change when a stream is choose
+        Method who makes all change when a stream is chosen
         """
         listNameOfStream = [stream.name() for stream in AppLSLVisu.tabStreams]
-        listPrint = ""
-        for name in listNameOfStream:
-            listPrint += "- " + name + "\n"
-        if self.textInput.value in listNameOfStream:
-            self.main_window.info_dialog("Success", "The stream has been found")
-            self.boxButtonPreference.remove(self.textInput)
-            self.boxButtonPreference.remove(widget)
-            self.boxButtonPreference.remove(self.back)
-            self.boxButtonPreference.add(self.buttonPreference)
-            AppLSLVisu.streamChoose = True
-            self.nameStream = self.textInput.value
-            self.listBoxGraph = []
-            self.boxGraph = toga.Box()
-            self.mainBox.add(self.boxGraph)
+        if listNameOfStream == []:
+            self.main_window.info_dialog("Error","No streams detected, please retry \"Get all Streams\"")
         else:
-            self.main_window.info_dialog("Error",
-                                         f"The stream has not been found, please try again\nList stream :\n{listPrint}")
+            listPrint = ""
+            for name in listNameOfStream:
+                listPrint += "- " + name + "\n"
+            if self.textInput.value in listNameOfStream:
+                self.main_window.info_dialog("Success", "The stream has been found")
+                self.boxButtonPreference.remove(self.textInput)
+                self.boxButtonPreference.remove(widget)
+                self.boxButtonPreference.remove(self.back)
+                self.boxButtonPreference.add(self.buttonPreference)
+                AppLSLVisu.streamChoose = True
+                self.nameStream = self.textInput.value
+                self.listBoxGraph = []
+                self.boxGraph = toga.Box()
+                self.mainBox.add(self.boxGraph)
+            else:
+                self.main_window.info_dialog("Error",
+                                             f"The stream has not been found, please try again\nList stream :\n{listPrint}")
 
     def backPreference(self, widget):
         self.boxButtonPreference.remove(self.textInput)
