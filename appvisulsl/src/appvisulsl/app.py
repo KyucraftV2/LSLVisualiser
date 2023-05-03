@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 import toga
 from pylsl import *
 from toga.style import Pack
-from toga.style.pack import COLUMN
+from toga.style.pack import COLUMN,ROW
 
 
 class AppLSLVisu(toga.App):
@@ -164,6 +164,8 @@ class AppLSLVisu(toga.App):
         self.boxButtonGetStream = toga.Box(style=Pack(direction=COLUMN))
         self.boxButtonPreference = toga.Box(style=Pack(direction=COLUMN))
 
+        self.bigBoxButton = toga.Box(style=Pack(direction=ROW))
+
         # Create the button
         self.buttonGraph = toga.Button("Start visualisation", on_press=self.displayGraph)
         self.buttonRecordData = toga.Button("Starting recording LSL", on_press=self.startRecord)
@@ -186,11 +188,12 @@ class AppLSLVisu(toga.App):
         self.boxButtonGetStream.add(self.buttonGetStream)
 
         # Add the boxes to the main box
-        self.mainBox.add(self.boxButtonGetStream)
-        self.mainBox.add(self.boxButtonPreference)
-        self.mainBox.add(self.boxButtonGraph)
-        self.mainBox.add(self.boxButtonRecord)
+        self.bigBoxButton.add(self.boxButtonGetStream)
+        self.bigBoxButton.add(self.boxButtonPreference)
+        self.bigBoxButton.add(self.boxButtonGraph)
+        self.bigBoxButton.add(self.boxButtonRecord)
 
+        self.mainBox.add(self.bigBoxButton)
         self.scrolling.content = self.mainBox
 
         # Create the main window
