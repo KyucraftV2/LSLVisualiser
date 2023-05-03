@@ -3,3 +3,7 @@ C:\Users\killian\AppData\Local\BeeWare\briefcase\Cache\tools\android_sdk\emulato
 
 Commande pour lancer l'app sur l'emu :
 briefcase run android -d "@pixel5
+
+Commande pour install un apk sur l'emu
+cd C:\Users\killian\AppData\Local\BeeWare\briefcase\Cache\tools\android_sdk\platform-tools
+.\adb.exe install "C:\Users\killian\Downloads\app.apk"
