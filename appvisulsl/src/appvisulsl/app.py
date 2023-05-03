@@ -37,7 +37,7 @@ class AppLSLVisu(toga.App):
             plt.ylabel("val")
             plt.title("graphe")
             try:
-                self.bigBoxGraph.clear()
+                self.listBoxGraph[i].clear()
             except:
                 pass
 
@@ -67,6 +67,7 @@ class AppLSLVisu(toga.App):
             size = self.main_window.size
             self.imageGraph.style.update(width=size[0] * 30 / 100, height=size[0] * 30 / 100)
             self.listBoxGraph[i].add(self.imageGraph)
+
             AppLSLVisu.countId += 1
 
         if AppLSLVisu.nbGraphGenerated >= 1:
