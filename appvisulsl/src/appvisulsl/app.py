@@ -163,8 +163,8 @@ class AppLSLVisu(toga.App):
         self.boxButtonRecord = toga.Box(style=Pack(direction=COLUMN))
         self.boxButtonGetStream = toga.Box(style=Pack(direction=COLUMN))
         self.boxButtonPreference = toga.Box(style=Pack(direction=COLUMN))
-
-        self.bigBoxButton = toga.Box(style=Pack(direction=ROW))
+        self.bigBoxButtonOne = toga.Box(style=Pack(direction=ROW))
+        self.bigBoxButtonTwo = toga.Box(style=Pack(direction=ROW))
 
         # Create the button
         self.buttonGraph = toga.Button("Start visualisation", on_press=self.displayGraph)
@@ -188,12 +188,14 @@ class AppLSLVisu(toga.App):
         self.boxButtonGetStream.add(self.buttonGetStream)
 
         # Add the boxes to the main box
-        self.bigBoxButton.add(self.boxButtonGetStream)
-        self.bigBoxButton.add(self.boxButtonPreference)
-        self.bigBoxButton.add(self.boxButtonGraph)
-        self.bigBoxButton.add(self.boxButtonRecord)
+        self.bigBoxButtonOne.add(self.boxButtonGetStream)
+        self.bigBoxButtonOne.add(self.boxButtonPreference)
+        self.bigBoxButtonTwo.add(self.boxButtonGraph)
+        self.bigBoxButtonTwo.add(self.boxButtonRecord)
 
-        self.mainBox.add(self.bigBoxButton)
+        self.mainBox.add(self.bigBoxButtonOne)
+        self.mainBox.add(self.bigBoxButtonTwo)
+
         self.scrolling.content = self.mainBox
 
         # Create the main window
