@@ -192,17 +192,16 @@ class AppLSLVisu(toga.App):
         self.img1 = toga.ImageView(image=toga.Image(os.path.join(resources, "flux1.png")))
         self.img2 = toga.ImageView(image=toga.Image(os.path.join(resources, "flux2.png")))
         self.img3 = toga.ImageView(image=toga.Image(os.path.join(resources, "flux3.png")))
-        self.img1.style.update(width=400, height=400)
-        self.img2.style.update(width=400, height=400)
-        self.img3.style.update(width=400, height=400)
         box1.add(self.img1)
         box2.add(self.img2)
         box3.add(self.img3)
 
-        bibox = toga.Box(style=Pack(direction=COLUMN))
-        bibox.add(box1)
-        bibox.add(box2)
-        bibox.add(box3)
+
+        self.bibox = toga.Box(style=Pack(direction=COLUMN))
+        self.bibox.add(box1)
+        self.bibox.add(box2)
+        self.bibox.add(box3)
+
 
         boutonTest = toga.Button("aaa",on_press=self.test)
 
@@ -216,14 +215,14 @@ class AppLSLVisu(toga.App):
         self.mainBox.add(self.boxButtonRecord)
         self.mainBox.add(boutonTest)
 
-        self.scrolling.content = bibox
+        self.scrolling.content = self.bibox
+
         self.mainBox.add(self.scrolling)
 
         # Create the main window
         self.main_window = toga.MainWindow(title=self.formal_name)
         self.main_window.content = self.mainBox
         self.main_window.show()
-        print(self.main_window.size)
 
     def startRecord(self, widget):
         """
@@ -339,9 +338,10 @@ class AppLSLVisu(toga.App):
     def test(self,widget):
         print(self.main_window.size)
         size = self.main_window.size
-        self.img1.style.update(width=size[0]*30/100,height=size[1]*25/100)
-        self.img2.style.update(width=size[0] * 30 / 100, height=size[1] * 30 / 100)
-        self.img3.style.update(width=size[0] * 30 / 100, height=size[1] * 30 / 100)
+        self.scrolling.content = self.bibox
+        self.img1.style.update(width=size[0]*30/100,height=size[0]*30/100)
+        self.img2.style.update(width=size[0] * 30 / 100, height=size[0]*30/100)
+        self.img3.style.update(width=size[0] * 30 / 100, height=size[0]*30/100)
         print("widht="+str(size[0]*30/100))
         print("height="+str(size[1]*30/100))
 
