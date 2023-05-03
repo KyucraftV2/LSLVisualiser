@@ -3,15 +3,14 @@ My first application
 """
 import asyncio
 import io
-import os.path
 import random
 import tempfile
 
+import matplotlib.pyplot as plt
 import toga
 # from pylsl import *
 from toga.style import Pack
 from toga.style.pack import COLUMN
-import matplotlib.pyplot as plt
 
 
 class AppLSLVisu(toga.App):
@@ -43,16 +42,16 @@ class AppLSLVisu(toga.App):
                 pass
 
             buf = io.BytesIO()
-            plt.savefig(buf,format='png')
+            plt.savefig(buf, format='png')
             fp = tempfile.NamedTemporaryFile()
             fp.name = fp.name + f"{i}"
-            with open(f"{fp.name}.png",'wb') as f:
+            with open(f"{fp.name}.png", 'wb') as f:
                 f.write(buf.getvalue())
 
             self.listTempFile.append(fp.name)
             plt.close()
 
-        AppLSLVisu.nbGraphGenerated+=1
+        AppLSLVisu.nbGraphGenerated += 1
 
     def displayGraph(self, widget):
         """
@@ -62,15 +61,15 @@ class AppLSLVisu(toga.App):
         self.boutonStopChart = toga.Button("Stop generating graph", on_press=self.stopGenerateGraph)
         self.boxButtonGraph.add(self.boutonStopChart)
         for i in range(2):
-            save = self.listTempFile[AppLSLVisu.nbGraphGenerated-1+i]+".png"
+            save = self.listTempFile[AppLSLVisu.nbGraphGenerated - 1 + i] + ".png"
             self.image = toga.Image(save)
-            self.imageGraph = toga.ImageView(image=self.image,id=f"view{AppLSLVisu.countId}")
+            self.imageGraph = toga.ImageView(image=self.image, id=f"view{AppLSLVisu.countId}")
             size = self.main_window.size
-            self.imageGraph.style.update(width=size[0]*30/100,height=size[0]*30/100)
+            self.imageGraph.style.update(width=size[0] * 30 / 100, height=size[0] * 30 / 100)
             self.listBoxGraph[i].add(self.imageGraph)
-            AppLSLVisu.countId+=1
+            AppLSLVisu.countId += 1
 
-        if AppLSLVisu.nbGraphGenerated>=1:
+        if AppLSLVisu.nbGraphGenerated >= 1:
             self.boxButtonGraph.remove(self.buttonGraph)
         # Start the background task
         self.add_background_task(self.regenGraph)
@@ -83,13 +82,13 @@ class AppLSLVisu(toga.App):
         await asyncio.sleep(3)
         self.createGraph()
         for i in range(2):
-            save = self.listTempFile[AppLSLVisu.nbGraphGenerated-1+i]+".png"
+            save = self.listTempFile[AppLSLVisu.nbGraphGenerated - 1 + i] + ".png"
             self.image = toga.Image(save)
-            self.imageGraph = toga.ImageView(image=self.image,id=f"view{AppLSLVisu.countId}")
+            self.imageGraph = toga.ImageView(image=self.image, id=f"view{AppLSLVisu.countId}")
             size = self.main_window.size
-            self.imageGraph.style.update(width=size[0]*30/100,height=size[0]*30/100)
+            self.imageGraph.style.update(width=size[0] * 30 / 100, height=size[0] * 30 / 100)
             self.listBoxGraph[i].add(self.imageGraph)
-            AppLSLVisu.countId+=1
+            AppLSLVisu.countId += 1
 
         # Start the background task
         if AppLSLVisu.isGenerateGraph:
@@ -126,9 +125,6 @@ class AppLSLVisu(toga.App):
 
         self.bigBoxGraph = toga.Box(style=Pack(direction=COLUMN))
 
-
-        boutonTest = toga.Button("aaa",on_press=self.test)
-
         # Add the button to the box corresponding
         self.boxButtonGetStream.add(self.buttonGetStream)
 
@@ -137,9 +133,8 @@ class AppLSLVisu(toga.App):
         self.mainBox.add(self.boxButtonPreference)
         self.mainBox.add(self.boxButtonGraph)
         self.mainBox.add(self.boxButtonRecord)
-        self.mainBox.add(boutonTest)
 
-        self.scrolling.content = self.self.bigBoxGraph
+        self.scrolling.content = self.bigBoxGraph
 
         self.mainBox.add(self.scrolling)
 
@@ -213,9 +208,10 @@ class AppLSLVisu(toga.App):
         self.boxButtonRecord.add(self.buttonRecordData)
         self.boxButtonPreference.add(self.buttonPreference)
         for i in range(2):
-            box = toga.Box(style=Pack(direction=COLUMN),id=f"box{i}")
+            box = toga.Box(style=Pack(direction=COLUMN), id=f"box{i}")
             self.listBoxGraph.append(box)
             self.bigBoxGraph.add(box)
+
     def preference(self, widget):
         """
         For setting just one stream who is generated
@@ -257,16 +253,6 @@ class AppLSLVisu(toga.App):
         self.boxButtonPreference.remove(self.button)
         self.boxButtonPreference.remove(self.back)
         self.boxButtonPreference.add(self.buttonPreference)
-
-    def test(self,widget):
-        print(self.main_window.size)
-        size = self.main_window.size
-        self.scrolling.content = self.bibox
-        self.img1.style.update(width=size[0]*30/100,height=size[0]*30/100)
-        self.img2.style.update(width=size[0] * 30 / 100, height=size[0]*30/100)
-        self.img3.style.update(width=size[0] * 30 / 100, height=size[0]*30/100)
-        print("widht="+str(size[0]*30/100))
-        print("height="+str(size[1]*30/100))
 
 
 def getStream(listStream: list, nameStream: str):

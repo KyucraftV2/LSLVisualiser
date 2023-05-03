@@ -29,7 +29,9 @@ LSL Visualiser a été développé en utilisant les technologies suivantes :
 - Matplotlib 3.6.0 pour la création des graphiques
 
 # LSL Visualiser (English)
-LSL Visualiser is an Android application designed to visualize data from a Lab Streaming Layer (LSL) server. This project was completed as part of my computer science internship for a research laboratory.
+
+LSL Visualiser is an Android application designed to visualize data from a Lab Streaming Layer (LSL) server. This
+project was completed as part of my computer science internship for a research laboratory.
 
 ## Download
 
@@ -37,7 +39,8 @@ You can download the application APK in the releases section of this project.
 
 ## Application Download
 
-The application is available as an APK in the [releases](https://github.com/KyucraftV2/LSLVisualiser/releases) of this repository. Simply download the APK file and install it on a compatible Android device to use it.
+The application is available as an APK in the [releases](https://github.com/KyucraftV2/LSLVisualiser/releases) of this
+repository. Simply download the APK file and install it on a compatible Android device to use it.
 
 Note that the application does not allow for downloading or exporting of the generated graphics.
 
