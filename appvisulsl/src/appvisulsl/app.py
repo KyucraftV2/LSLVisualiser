@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 import toga
 from pylsl import *
 from toga.style import Pack
-from toga.style.pack import COLUMN,ROW
+from toga.style.pack import COLUMN, ROW
 
 
 class AppLSLVisu(toga.App):
@@ -271,6 +271,16 @@ class AppLSLVisu(toga.App):
             self.listBoxGraph.append(box)
             self.mainBox.add(box)
 
+        listNameOfStream = [stream.name() for stream in AppLSLVisu.tabStreams]
+        if listNameOfStream == []:
+            self.main_window.info_dialog("Information","No streams found")
+        else:
+            listPrint = ""
+            for name in listNameOfStream:
+                listPrint += "- " + name + "\n"
+            self.main_window.info_dialog("Information",
+                                         f"List of stream found :\n{listPrint}")
+
     def preference(self, widget):
         """
         For setting just one stream who is generated
@@ -289,7 +299,7 @@ class AppLSLVisu(toga.App):
         """
         listNameOfStream = [stream.name() for stream in AppLSLVisu.tabStreams]
         if listNameOfStream == []:
-            self.main_window.info_dialog("Error","No streams detected, please retry \"Get all Streams\"")
+            self.main_window.info_dialog("Error", "No streams detected, please retry \"Get all Streams\"")
         else:
             listPrint = ""
             for name in listNameOfStream:
