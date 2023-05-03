@@ -108,6 +108,9 @@ class AppLSLVisu(toga.App):
         self.boxButtonRecord = toga.Box(style=Pack(direction=COLUMN))
         self.boxButtonGetStream = toga.Box(style=Pack(direction=COLUMN))
         self.boxButtonPreference = toga.Box(style=Pack(direction=COLUMN))
+        self.bigBoxButtonOne = toga.Box(style=Pack(direction=ROW))
+        self.bigBoxButtonTwo = toga.Box(style=Pack(direction=ROW))
+        self.bigBoxGraph = toga.Box(style=Pack(direction=COLUMN))
 
         # Create the button
         self.buttonGraph = toga.Button("Start visualisation", on_press=self.displayGraph)
@@ -127,30 +130,18 @@ class AppLSLVisu(toga.App):
         # Create a scroller for graph
         self.scrolling = toga.ScrollContainer(style=Pack(direction=COLUMN))
 
-        self.bigBoxGraph = toga.Box(style=Pack(direction=COLUMN))
 
         # Add the button to the box corresponding
         self.boxButtonGetStream.add(self.buttonGetStream)
 
-        #Testing for set two buttons
-        b1 = toga.Button("hi",on_press=lambda : print("hi"))
-        b2 = toga.Button("hola",on_press=lambda:print("hola"))
-        b3 = toga.Button("bonjour", on_press=lambda: print("bonjour"))
-        b4 = toga.Button("hallo", on_press=lambda: print("hallo"))
-
-        split = toga.Box(style=Pack(direction=ROW))
-        split.add(b1)
-        split.add(b2)
-        split.add(b3)
-        split.add(b4)
-
 
         # Add the boxes to the main box
-        self.mainBox.add(self.boxButtonGetStream)
-        self.mainBox.add(self.boxButtonPreference)
-        self.mainBox.add(self.boxButtonGraph)
-        self.mainBox.add(self.boxButtonRecord)
-        self.mainBox.add(split)
+        self.bigBoxButtonOne.add(self.boxButtonGetStream)
+        self.bigBoxButtonOne.add(self.boxButtonPreference)
+        self.bigBoxButtonTwo.add(self.boxButtonGraph)
+        self.bigBoxButtonTwo.add(self.boxButtonRecord)
+        self.mainBox.add(self.bigBoxButtonOne)
+        self.mainBox.add(self.bigBoxButtonTwo)
 
         self.scrolling.content = self.bigBoxGraph
 
