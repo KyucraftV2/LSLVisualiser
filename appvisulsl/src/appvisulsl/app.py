@@ -28,14 +28,15 @@ class AppLSLVisu(toga.App):
         """
         Generate data
         """
-        for i in range(2):
+        for i in range(3):
+            print(f"creation du graphe : {i}")
             listeVal = [random.randint(0, 100) for i in range(0, 15)]
             listeTime = [i for i in range(0, 15)]
             plt.figure()
             plt.plot(listeTime, listeVal)
             plt.xlabel("temps")
             plt.ylabel("val")
-            plt.title("graphe")
+            plt.title(f"graphe{i}")
             try:
                 self.listBoxGraph[i].clear()
             except:
@@ -60,13 +61,14 @@ class AppLSLVisu(toga.App):
         self.createGraph()
         self.boutonStopChart = toga.Button("Stop generating graph", on_press=self.stopGenerateGraph)
         self.boxButtonGraph.add(self.boutonStopChart)
-        for i in range(2):
+        for i in range(3):
             save = self.listTempFile[AppLSLVisu.nbGraphGenerated - 1 + i] + ".png"
             self.image = toga.Image(save)
             self.imageGraph = toga.ImageView(image=self.image, id=f"view{AppLSLVisu.countId}")
             size = self.main_window.size
             self.imageGraph.style.update(width=size[0] * 30 / 100, height=size[0] * 30 / 100)
             self.listBoxGraph[i].add(self.imageGraph)
+            self.scrolling.refresh()
 
             AppLSLVisu.countId += 1
 
@@ -82,13 +84,14 @@ class AppLSLVisu(toga.App):
         """
         await asyncio.sleep(3)
         self.createGraph()
-        for i in range(2):
+        for i in range(3):
             save = self.listTempFile[AppLSLVisu.nbGraphGenerated - 1 + i] + ".png"
             self.image = toga.Image(save)
             self.imageGraph = toga.ImageView(image=self.image, id=f"view{AppLSLVisu.countId}")
             size = self.main_window.size
             self.imageGraph.style.update(width=size[0] * 30 / 100, height=size[0] * 30 / 100)
             self.listBoxGraph[i].add(self.imageGraph)
+            print(f"graphe regen : {i}")
             AppLSLVisu.countId += 1
 
         # Start the background task
@@ -184,7 +187,7 @@ class AppLSLVisu(toga.App):
         self.boxButtonGraph.add(self.buttonGraph)
         self.boxButtonRecord.add(self.buttonRecordData)
         self.boxButtonPreference.add(self.buttonPreference)
-        for i in range(2):
+        for i in range(3):
             box = toga.Box(style=Pack(direction=COLUMN), id=f"box{i}")
             self.listBoxGraph.append(box)
             self.bigBoxGraph.add(box)
