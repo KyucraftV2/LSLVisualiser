@@ -339,11 +339,11 @@ class AppLSLVisu(toga.App):
     def test(self,widget):
         print(self.main_window.size)
         size = self.main_window.size
-        self.img1.style.update(width=size[0]*25/100,height=size[1]*25/100)
-        #self.img2.style.update(width=size[0] * 25 / 100, height=size[1] * 25 / 100)
-        #self.img3.style.update(width=size[0] * 25 / 100, height=size[1] * 25 / 100)
-        print("widht="+size[0]*30/100)
-        print("height="+size[1]*30/100)
+        self.img1.style.update(width=size[0]*30/100,height=size[1]*25/100)
+        self.img2.style.update(width=size[0] * 30 / 100, height=size[1] * 30 / 100)
+        self.img3.style.update(width=size[0] * 30 / 100, height=size[1] * 30 / 100)
+        print("widht="+str(size[0]*30/100))
+        print("height="+str(size[1]*30/100))
 
 
 def getStream(listStream: list, nameStream: str):
