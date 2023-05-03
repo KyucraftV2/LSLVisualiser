@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 import toga
 # from pylsl import *
 from toga.style import Pack
-from toga.style.pack import COLUMN
+from toga.style.pack import COLUMN,ROW
 
 
 class AppLSLVisu(toga.App):
@@ -132,11 +132,21 @@ class AppLSLVisu(toga.App):
         # Add the button to the box corresponding
         self.boxButtonGetStream.add(self.buttonGetStream)
 
+        #Testing for set two buttons
+        b1 = toga.Button("hey",on_press=lambda : print("hey"))
+        b2 = toga.Button("hola",on_press=lambda:print("hola"))
+
+        split = toga.Box(style=Pack(direction=ROW))
+        split.add(b1)
+        split.add(b2)
+
+
         # Add the boxes to the main box
         self.mainBox.add(self.boxButtonGetStream)
         self.mainBox.add(self.boxButtonPreference)
         self.mainBox.add(self.boxButtonGraph)
         self.mainBox.add(self.boxButtonRecord)
+        self.mainBox.add(split)
 
         self.scrolling.content = self.bigBoxGraph
 
