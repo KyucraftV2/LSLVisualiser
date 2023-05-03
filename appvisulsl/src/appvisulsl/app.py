@@ -2,13 +2,10 @@
 My first application
 """
 import asyncio
-import io
 import os.path
-import tempfile
 
-import matplotlib.pyplot as plt
 import toga
-#from pylsl import *
+# from pylsl import *
 from toga.style import Pack
 from toga.style.pack import COLUMN
 
@@ -186,13 +183,13 @@ class AppLSLVisu(toga.App):
         # Create a scroller for graph
         self.scrolling = toga.ScrollContainer(style=Pack(direction=COLUMN))
 
-        #Testing
+        # Testing
         box1 = toga.Box()
-        box2=toga.Box()
-        box3=toga.Box()
+        box2 = toga.Box()
+        box3 = toga.Box()
 
-        resources = os.path.join(AppLSLVisu.app.paths.app,"resources")
-        img1=toga.ImageView(image=toga.Image(os.path.join(resources,"flux1.png")))
+        resources = os.path.join(AppLSLVisu.app.paths.app, "resources")
+        img1 = toga.ImageView(image=toga.Image(os.path.join(resources, "flux1.png")))
         img2 = toga.ImageView(image=toga.Image(os.path.join(resources, "flux2.png")))
         img3 = toga.ImageView(image=toga.Image(os.path.join(resources, "flux3.png")))
         img1.style.update(width=400, height=400)
@@ -207,6 +204,8 @@ class AppLSLVisu(toga.App):
         bibox.add(box2)
         bibox.add(box3)
 
+        boutonTest = toga.Button("aaa",on_press=self.test)
+
         # Add the button to the box corresponding
         self.boxButtonGetStream.add(self.buttonGetStream)
 
@@ -215,6 +214,7 @@ class AppLSLVisu(toga.App):
         self.mainBox.add(self.boxButtonPreference)
         self.mainBox.add(self.boxButtonGraph)
         self.mainBox.add(self.boxButtonRecord)
+        self.mainBox.add(boutonTest)
 
         self.scrolling.content = bibox
         self.mainBox.add(self.scrolling)
@@ -223,6 +223,7 @@ class AppLSLVisu(toga.App):
         self.main_window = toga.MainWindow(title=self.formal_name)
         self.main_window.content = self.mainBox
         self.main_window.show()
+        print(self.main_window.size)
 
     def startRecord(self, widget):
         """
@@ -334,6 +335,9 @@ class AppLSLVisu(toga.App):
         self.boxButtonPreference.remove(self.button)
         self.boxButtonPreference.remove(self.back)
         self.boxButtonPreference.add(self.buttonPreference)
+
+    def test(self,widget):
+        print(self.main_window.size)
 
 
 def getStream(listStream: list, nameStream: str):
