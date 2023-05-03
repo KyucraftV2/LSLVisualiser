@@ -133,12 +133,16 @@ class AppLSLVisu(toga.App):
         self.boxButtonGetStream.add(self.buttonGetStream)
 
         #Testing for set two buttons
-        b1 = toga.Button("hey",on_press=lambda : print("hey"))
+        b1 = toga.Button("hi",on_press=lambda : print("hi"))
         b2 = toga.Button("hola",on_press=lambda:print("hola"))
+        b3 = toga.Button("bonjour", on_press=lambda: print("bonjour"))
+        b4 = toga.Button("hallo", on_press=lambda: print("hallo"))
 
         split = toga.Box(style=Pack(direction=ROW))
         split.add(b1)
         split.add(b2)
+        split.add(b3)
+        split.add(b4)
 
 
         # Add the boxes to the main box
