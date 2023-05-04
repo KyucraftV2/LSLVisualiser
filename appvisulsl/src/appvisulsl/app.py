@@ -62,7 +62,7 @@ class AppLSLVisu(toga.App):
             self.image = toga.Image(save)
             self.imageGraph = toga.ImageView(image=self.image, id=f"view{AppLSLVisu.countId}")
             size = self.main_window.size
-            self.imageGraph.style.update(width=200, height=200)
+            self.imageGraph.style.update(width=size[0] * 30 / 100, height=size[0] * 30 / 100)
             self.listBoxGraph[i].add(self.imageGraph)
             self.scrolling.refresh()
 
@@ -87,7 +87,7 @@ class AppLSLVisu(toga.App):
             self.image = toga.Image(save)
             self.imageGraph = toga.ImageView(image=self.image, id=f"view{AppLSLVisu.countId}")
             size = self.main_window.size
-            self.imageGraph.style.update(width=200, height=200)
+            self.imageGraph.style.update(width=size[0] * 30 / 100, height=size[0] * 30 / 100)
             self.listBoxGraph[i].add(self.imageGraph)
             AppLSLVisu.countId += 1
 
