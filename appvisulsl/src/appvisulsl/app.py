@@ -78,7 +78,7 @@ class AppLSLVisu(toga.App):
                 fp.name = fp.name + AppLSLVisu.tabStreams[i].name()
                 with open(f"{fp.name}.png", 'wb') as f:
                     f.write(buf.getvalue())
-                self.listTempFile.append(fp.name)
+                self.listTempFile[i] = fp.name
                 plt.close()
 
         AppLSLVisu.nbGraphGenerated += 1
@@ -105,7 +105,7 @@ class AppLSLVisu(toga.App):
         else:
             # Display the graph
             for i in range(len(AppLSLVisu.tabStreams)):
-                save = self.listTempFile[AppLSLVisu.nbGraphGenerated - 1 + i] + ".png"
+                save = self.listTempFile[i] + ".png"
                 self.image = toga.Image(save)
                 self.imageGraph = toga.ImageView(image=self.image, id=f"view{AppLSLVisu.countId}")
                 self.listImgGraph[i] = self.imageGraph
@@ -141,7 +141,7 @@ class AppLSLVisu(toga.App):
         else:
             # Display the graph
             for i in range(len(AppLSLVisu.tabStreams)):
-                save = self.listTempFile[AppLSLVisu.nbGraphGenerated - 1 + i] + ".png"
+                save = self.listTempFile[i] + ".png"
                 self.image = toga.Image(save)
                 self.imageGraph = toga.ImageView(image=self.image, id=f"view{AppLSLVisu.countId}")
                 self.imageGraph.style.update(width=300, height=300)
@@ -173,7 +173,7 @@ class AppLSLVisu(toga.App):
         self.buttonPreference = toga.Button("Preference", on_press=self.preference)
 
         # Create the list of temporary files
-        self.listTempFile = []
+        self.listTempFile = {}
 
         # Create the list of images
         self.listImgGraph = []
@@ -266,6 +266,7 @@ class AppLSLVisu(toga.App):
         self.boxButtonGraph.add(self.buttonGraph)
         self.boxButtonRecord.add(self.buttonRecordData)
         self.boxButtonPreference.add(self.buttonPreference)
+        self.listTempFile = {i: "" for i in range(len(AppLSLVisu.tabStreams))}
         for i in range(len(AppLSLVisu.tabStreams)):
             box = toga.Box(style=Pack(direction=COLUMN), id=f"box{i}")
             self.listBoxGraph.append(box)
@@ -273,7 +274,7 @@ class AppLSLVisu(toga.App):
 
         listNameOfStream = [stream.name() for stream in AppLSLVisu.tabStreams]
         if listNameOfStream == []:
-            self.main_window.info_dialog("Information","No streams found")
+            self.main_window.info_dialog("Information", "No streams found")
         else:
             listPrint = ""
             for name in listNameOfStream:
