@@ -50,7 +50,7 @@ class AppLSLVisu(toga.App):
             fp.name = fp.name + AppLSLVisu.tabStreams[placeStream].name()
             with open(f"{fp.name}.png", 'wb') as f:
                 f.write(buf.getvalue())
-            self.listTempFile.append(fp.name)
+            self.listTempFile[0]=fp.name
             plt.close()
         else:
             for i in range(len(AppLSLVisu.tabStreams)):
@@ -95,7 +95,7 @@ class AppLSLVisu(toga.App):
         self.boxButtonGraph.add(self.boutonStopChart)
 
         if AppLSLVisu.streamChoose:
-            save = self.listTempFile[AppLSLVisu.nbGraphGenerated - 1] + ".png"
+            save = self.listTempFile[0] + ".png"
             self.image = toga.Image(save)
             self.imageGraph = toga.ImageView(image=self.image, id=f"view{AppLSLVisu.countId}")
             self.listImgGraph[0] = self.imageGraph
@@ -131,7 +131,7 @@ class AppLSLVisu(toga.App):
         self.createGraph()
 
         if AppLSLVisu.streamChoose:
-            save = self.listTempFile[AppLSLVisu.nbGraphGenerated - 1] + ".png"
+            save = self.listTempFile[0] + ".png"
             self.image = toga.Image(save)
             self.imageGraph = toga.ImageView(image=self.image, id=f"view{AppLSLVisu.countId}")
             self.imageGraph.style.update(width=300, height=300)
