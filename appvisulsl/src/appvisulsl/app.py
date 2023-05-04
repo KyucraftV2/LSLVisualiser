@@ -3,6 +3,7 @@ My first application
 """
 import asyncio
 import io
+import os.path
 import random
 import tempfile
 
@@ -37,11 +38,6 @@ class AppLSLVisu(toga.App):
             plt.xlabel("temps")
             plt.ylabel("val")
             plt.title(f"graphe{i}")
-            try:
-                self.listBoxGraph[i].clear()
-            except:
-                pass
-
             buf = io.BytesIO()
             plt.savefig(buf, format='png')
             fp = tempfile.NamedTemporaryFile()
@@ -62,11 +58,12 @@ class AppLSLVisu(toga.App):
         self.boutonStopChart = toga.Button("Stop generating graph", on_press=self.stopGenerateGraph)
         self.boxButtonGraph.add(self.boutonStopChart)
         for i in range(3):
+            self.listBoxGraph[i].clear()
             save = self.listTempFile[AppLSLVisu.nbGraphGenerated - 1 + i] + ".png"
-            self.image = toga.Image(save)
+            self.image = toga.Image(os.path.join(AppLSLVisu.app.paths.app, f"resources/flux{i + 1}.png"))
             self.imageGraph = toga.ImageView(image=self.image, id=f"view{AppLSLVisu.countId}")
             size = self.main_window.size
-            self.imageGraph.style.update(width=size[0] * 30 / 100, height=size[0] * 30 / 100)
+            self.imageGraph.style.update(width=200, height=200)
             self.listBoxGraph[i].add(self.imageGraph)
             self.scrolling.refresh()
 
@@ -85,11 +82,12 @@ class AppLSLVisu(toga.App):
         await asyncio.sleep(3)
         self.createGraph()
         for i in range(3):
+            self.listBoxGraph[i].clear()
             save = self.listTempFile[AppLSLVisu.nbGraphGenerated - 1 + i] + ".png"
-            self.image = toga.Image(save)
+            self.image = toga.Image(os.path.join(AppLSLVisu.app.paths.app, f"resources/flux{i + 1}.png"))
             self.imageGraph = toga.ImageView(image=self.image, id=f"view{AppLSLVisu.countId}")
             size = self.main_window.size
-            self.imageGraph.style.update(width=size[0] * 30 / 100, height=size[0] * 30 / 100)
+            self.imageGraph.style.update(width=200, height=200)
             self.listBoxGraph[i].add(self.imageGraph)
             print(f"graphe regen : {i}")
             AppLSLVisu.countId += 1
