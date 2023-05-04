@@ -22,7 +22,7 @@ class AppLSLVisu(toga.App):
     tabTimestamp = [0]
     nbValPlot = 0
     tabStreams = []
-    countId = 0
+    countId = 1
     streamChoose = False
 
     def createGraph(self):
@@ -30,7 +30,6 @@ class AppLSLVisu(toga.App):
         Generate data
         """
         for i in range(3):
-            print(f"creation du graphe : {i}")
             listeVal = [random.randint(0, 100) for i in range(0, 15)]
             listeTime = [i for i in range(0, 15)]
             plt.figure()
@@ -45,7 +44,7 @@ class AppLSLVisu(toga.App):
             with open(f"{fp.name}.png", 'wb') as f:
                 f.write(buf.getvalue())
 
-            self.listTempFile.append(fp.name)
+            self.listTempFile[i+1]=fp.name
             plt.close()
 
         AppLSLVisu.nbGraphGenerated += 1
@@ -59,8 +58,8 @@ class AppLSLVisu(toga.App):
         self.boxButtonGraph.add(self.boutonStopChart)
         for i in range(3):
             self.listBoxGraph[i].clear()
-            save = self.listTempFile[AppLSLVisu.nbGraphGenerated - 1 + i] + ".png"
-            self.image = toga.Image(os.path.join(AppLSLVisu.app.paths.app, f"resources/flux{i + 1}.png"))
+            save = self.listTempFile[i+1] + ".png"
+            self.image = toga.Image(save)
             self.imageGraph = toga.ImageView(image=self.image, id=f"view{AppLSLVisu.countId}")
             size = self.main_window.size
             self.imageGraph.style.update(width=200, height=200)
@@ -83,13 +82,13 @@ class AppLSLVisu(toga.App):
         self.createGraph()
         for i in range(3):
             self.listBoxGraph[i].clear()
-            save = self.listTempFile[AppLSLVisu.nbGraphGenerated - 1 + i] + ".png"
-            self.image = toga.Image(os.path.join(AppLSLVisu.app.paths.app, f"resources/flux{i + 1}.png"))
+            save = self.listTempFile[i+1] + ".png"
+            print(save)
+            self.image = toga.Image(save)
             self.imageGraph = toga.ImageView(image=self.image, id=f"view{AppLSLVisu.countId}")
             size = self.main_window.size
             self.imageGraph.style.update(width=200, height=200)
             self.listBoxGraph[i].add(self.imageGraph)
-            print(f"graphe regen : {i}")
             AppLSLVisu.countId += 1
 
         # Start the background task
@@ -117,7 +116,11 @@ class AppLSLVisu(toga.App):
         self.buttonPreference = toga.Button("Preference", on_press=self.preference)
 
         # Create the list of temporary files
-        self.listTempFile = []
+        self.listTempFile = {
+            1:"",
+            2:"",
+            3:"",
+        }
 
         # Create the list of images
         self.listImgGraph = []
