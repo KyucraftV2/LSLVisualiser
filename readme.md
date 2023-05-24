@@ -16,7 +16,7 @@ Notez que l'application ne permet pas de télécharger ou d'exporter les graphiq
 
 ## Technologies utilisées
 
-![Python](https://img.shields.io/badge/python-3.11-red)
+![Python](https://img.shields.io/badge/python-3.8-red)
 ![Toga](https://img.shields.io/badge/Toga-0.3.1-orange)
 ![pylsl](https://img.shields.io/badge/PyLSL-1.16.1-orange)
 ![Matplotlib](https://img.shields.io/badge/MatPlotLib-3.6.0-yellow)
@@ -43,7 +43,7 @@ Note that the application does not allow for downloading or exporting of the gen
 
 ## Technologies Used
 
-![Python](https://img.shields.io/badge/python-3.11-red)
+![Python](https://img.shields.io/badge/python-3.8-red)
 ![Toga](https://img.shields.io/badge/Toga-0.3.1-orange)
 ![pylsl](https://img.shields.io/badge/PyLSL-1.16.1-orange)
 ![Matplotlib](https://img.shields.io/badge/MatPlotLib-3.6.0-yellow)
