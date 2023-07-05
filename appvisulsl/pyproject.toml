@@ -23,6 +23,7 @@ test_sources = [
 
 requires = [
     "matplotlib==3.6.0",
+    'chaquopy_liblsl',
     "pylsl",
 ]
 test_requires = [
@@ -146,6 +147,7 @@ requires = [
 requires = [
     "toga-android~=0.3.1"
 ]
+build_gradle_extra_content = "android.defaultConfig.python.pip.options '--extra-index-url', 'C:/Users/killian/PycharmProjects/LSLVisualiser/appvisulsl/src/appvisulsl/resources/TestWheel'"
 
 # Web deployments
 [tool.briefcase.app.appvisulsl.web]
