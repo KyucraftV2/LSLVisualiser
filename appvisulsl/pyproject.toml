@@ -144,9 +144,10 @@ requires = [
 
 [tool.briefcase.app.appvisulsl.android]
 requires = [
-    "toga-android~=0.3.1"
+    "toga-android~=0.3.1",
+    "pylsl"
 ]
-build_gradle_extra_content = "android.defaultConfig.python.pip.options '--extra-index-url', 'C:/Users/killian/PycharmProjects/LSLVisualiser/appvisulsl/src/appvisulsl/resources/TestWheel'"
+build_gradle_extra_content = "android.defaultConfig.python.pip.options '--extra-index-url', 'https://chaquo.com/pypi-test/'"
 
 # Web deployments
 [tool.briefcase.app.appvisulsl.web]
